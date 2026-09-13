@@ -17,6 +17,14 @@
       <span class="eyebrow">Datasets</span>
       <h1>Two generations, one physics engine</h1>
       <p class="lede">Both dataset iterations were produced by <code>relativistic_simulator</code> — the difference is entirely in how the input parameter ranges (especially β) were sampled.</p>
+      <div class="plain-note">
+        <span class="plain-tag">In plain words</span><br>
+        The physics engine is the recipe; this page is about the shopping list — which values of mass, force, speed and time actually got fed into it, and in what proportion. That choice turned out to matter more than anything about the models themselves — see the <a href="research.html#qa">"widening the training data" finding</a>.
+      </div>
+      <div class="mini-qa">
+        <div class="mq"><div class="mq-q">Why generate 1,000,000 rows instead of, say, 10,000?</div><div class="mq-a">More examples means better coverage of the huge mass/force ranges, and it was still fast enough to train nine different models on within minutes.</div></div>
+        <div class="mq"><div class="mq-q">Why does the "extreme" test set behave differently across the two iterations?</div><div class="mq-a">Because it's only "extreme" relative to what a model actually trained on — see the callouts below, and the full explanation on the <a href="research.html#qa">research page</a>.</div></div>
+      </div>
     </div>
   </section>
 

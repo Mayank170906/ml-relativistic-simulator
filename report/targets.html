@@ -17,6 +17,14 @@
       <span class="eyebrow">Target analysis</span>
       <h1>Eight targets, eight learning problems</h1>
       <p class="lede">Position, velocity, β, γ, momentum, kinetic energy, total energy and proper time all come from the same simulator call — but they differ enormously in how learnable they are. Pick a target below for its full profile.</p>
+      <div class="plain-note">
+        <span class="plain-tag">In plain words</span><br>
+        Even though every one of these 8 numbers comes from the same simulator run, some are smooth and easy for a model to pick up (like proper time) and some are sharply curved or huge-range (like gamma and kinetic energy), which makes them genuinely harder — no matter which model you throw at them.
+      </div>
+      <div class="mini-qa">
+        <div class="mq"><div class="mq-q">Why is gamma so inconsistent — great with one model, terrible with another?</div><div class="mq-a">Gamma shoots toward infinity as speed nears light-speed; only models flexible enough to track that steep curve (like Hist Gradient Boosting) capture it well.</div></div>
+        <div class="mq"><div class="mq-q">Why do velocity and beta always score identically?</div><div class="mq-a">Because β is just velocity divided by a constant (the speed of light) — it's the same relationship wearing a different unit.</div></div>
+      </div>
     </div>
   </section>
 

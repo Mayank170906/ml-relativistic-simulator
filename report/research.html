@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Research, Explained</title>
+<meta name="description" content="A plain-English guide to this project: the question it asks, the full workflow from physics engine to trained model, every keyword defined, and the reasoning behind each decision.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main>
+  <section class="research-hero">
+    <div class="wrap">
+      <span class="eyebrow">Start here</span>
+      <h1>What this project actually did — explained simply</h1>
+      <p class="lede">This page is the plain-English front door to the whole project. No page-long sentences, no assumed vocabulary. It walks through the one question this project is asking, the full pipeline from raw physics to a trained model, every keyword you'll meet on the way, and — in a running Q&amp;A — <em>why</em> each decision was made. Every other page on this site is the detailed, numbers-heavy version of one step described here.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#workflow">See the workflow →</a>
+        <a class="btn btn-ghost" href="#glossary">Jump to glossary</a>
+        <a class="btn btn-ghost" href="#qa">Jump to Q&amp;A</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap research-shell">
+      <nav class="research-toc" id="researchToc" aria-label="On this page">
+        <a href="#question"><span class="toc-num">01</span>The big question</a>
+        <a href="#workflow"><span class="toc-num">02</span>The full workflow</a>
+        <a href="#glossary"><span class="toc-num">03</span>Glossary of every term</a>
+        <a href="#qa"><span class="toc-num">04</span>Why I did what I did</a>
+        <a href="#findings"><span class="toc-num">05</span>What actually happened</a>
+        <a href="#map"><span class="toc-num">06</span>Where to read more</a>
+      </nav>
+
+      <div>
+        <!-- 01 THE BIG QUESTION -->
+        <div class="research-block" id="question">
+          <span class="plain-tag">01 · Plain English</span>
+          <h2><span class="block-icon">🎯</span>The big question, in one paragraph</h2>
+          <p>When something moves close to the speed of light, ordinary "school physics" (<code>F = ma</code>) stops being accurate — you need <strong class="kw" title="The theory describing motion, time and energy for objects moving at any speed, including near light-speed.">special relativity</strong> instead. This project asks a simple question: <em>if you never told a machine-learning model about relativity, could it figure out the pattern anyway just by looking at a lot of examples?</em> So the project built its own exact physics simulator to generate perfect example data, then handed that data to ordinary machine-learning models — nothing physics-aware, just regressors — and measured how close they could get to the real answer, both for speeds they'd seen during training and for speeds they hadn't.</p>
+          <div class="plain-note">
+            <span class="plain-tag">Plain-English summary</span><br>
+            <strong>In one line:</strong> "Can a normal ML model learn the rules of relativity from examples alone, and does it still work if you ask it about speeds far outside what it was trained on?"
+          </div>
+        </div>
+
+        <!-- 02 WORKFLOW -->
+        <div class="research-block" id="workflow">
+          <span class="plain-tag">02 · Plain English</span>
+          <h2><span class="block-icon">🛠️</span>The full workflow, step by step</h2>
+          <p>Every other page on this site is a zoomed-in view of one of these seven steps. Read this section first — it's the map.</p>
+          <div class="workflow-rail" id="workflowRail"></div>
+        </div>
+
+        <!-- 03 GLOSSARY -->
+        <div class="research-block" id="glossary">
+          <span class="plain-tag">03 · Reference</span>
+          <h2><span class="block-icon">📖</span>Glossary — every keyword, defined simply</h2>
+          <p>Every term used anywhere on this site is here, in plain words first and the formal definition underneath. Search or filter to find one fast.</p>
+          <div class="glossary-tools">
+            <input class="glossary-search" id="glossarySearch" type="search" placeholder="Search a term, e.g. &quot;gamma&quot; or &quot;R²&quot;…">
+            <div class="glossary-filters" id="glossaryFilters">
+              <button data-cat="all" class="active">All</button>
+              <button data-cat="physics">Physics</button>
+              <button data-cat="ml">Machine learning</button>
+              <button data-cat="data">Data &amp; method</button>
+            </div>
+          </div>
+          <div class="glossary-grid" id="glossaryGrid"></div>
+        </div>
+
+        <!-- 04 Q&A -->
+        <div class="research-block" id="qa">
+          <span class="plain-tag">04 · Reasoning</span>
+          <h2><span class="block-icon">💬</span>Why I did what I did</h2>
+          <p>A running Q&amp;A of the actual decisions behind this project — the questions I imagine a reader (or my future self) asking about every choice.</p>
+          <div class="qa-list" id="qaList"></div>
+        </div>
+
+        <!-- 05 FINDINGS -->
+        <div class="research-block" id="findings">
+          <span class="plain-tag">05 · Plain English</span>
+          <h2><span class="block-icon">📊</span>What actually happened — the short version</h2>
+          <p>Full numbers live on <a href="results.html">Results</a>, <a href="ood.html">Normal vs Extreme</a> and <a href="targets.html">Target Analysis</a>. Here's the plain-English headline for each.</p>
+          <div class="grid grid-2" id="findingsGrid"></div>
+        </div>
+
+        <!-- 06 MAP -->
+        <div class="research-block" id="map" style="margin-bottom:1rem">
+          <span class="plain-tag">06 · Where next</span>
+          <h2><span class="block-icon">🗺️</span>Where to read the detailed version of each step</h2>
+          <div class="grid grid-3" id="mapGrid"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="site-footer" class="site-footer"></footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+(function(){
+
+  /* ---------------- Workflow ---------------- */
+  var workflow = [
+    {
+      title: "1. Build an exact physics engine",
+      what: "Instead of scattering relativity formulas across notebooks, I wrote and published a standalone Python package, <code>relativistic-simulator</code>, that computes the exact motion of a particle under a constant force at any speed, including extremely close to light-speed.",
+      why: "A model is only as trustworthy as its ground truth. If the \"correct answers\" used to train and grade the ML models were themselves approximate or buggy, every result downstream would be meaningless. Packaging it separately also means it's independently tested and numerically validated — see the <a href=\"physics-engine.html\">Physics Engine</a> page."
+    },
+    {
+      title: "2. Generate the training data",
+      what: "The engine was run 1,000,000 times with randomly sampled mass, force, starting speed and elapsed time, recording 5 inputs and 8 physical outputs (position, velocity, β, γ, momentum, kinetic energy, total energy, proper time) each time.",
+      why: "One million examples gives the models enough variety to see the relationship in many different regimes, not just one. The ranges were deliberately sampled on a <span class=\"kw\" title=\"Sampling values evenly across orders of magnitude (10⁰, 10¹, 10², …) instead of evenly across a plain number line.\">log scale</span> for mass and force, and as a deliberate mixture of everyday and near-light speeds for β — see <a href=\"datasets.html\">Datasets</a>."
+    },
+    {
+      title: "3. Split the data honestly",
+      what: "The million rows were split into 800,000 for training, 100,000 for validation (tuning), and 100,000 for a final, untouched \"normal\" test. A separate, independently-generated 10,000-row \"extreme\" set was also created, deliberately weighted toward near-light-speed cases.",
+      why: "If you test a model on data it already learned from, its score is meaningless — it's like grading a student on the exact questions they memorized. A clean, unseen test set is the only honest way to measure whether the model actually learned the pattern versus just memorized examples."
+    },
+    {
+      title: "4. Train many different model types",
+      what: "Nine different model types were trained on the identical data: seven classic scikit-learn regressors (linear regression, polynomial regression, decision tree, random forest, extra trees, gradient boosting, histogram gradient boosting) plus two small neural networks (a plain one, and one fed extra \"squared and multiplied\" features).",
+      why: "No single model family is best at everything — some handle smooth curves well, some handle sharp corners well, some handle huge value ranges well. Comparing many side-by-side on the exact same data is the only fair way to find out which properties of a problem favor which kind of model — see <a href=\"models.html\">Models</a>."
+    },
+    {
+      title: "5. Score every model on the normal test set",
+      what: "Every model's predictions were compared against the true physics answers using three scores: R² (closeness to perfect, 1.0 = perfect), RMSE and MAE (average size of the error). This was done separately for all 8 physical quantities.",
+      why: "A single overall accuracy number can hide a lot — a model might be great at predicting position but terrible at predicting kinetic energy. Scoring every target separately shows exactly where each model is strong or weak, which is the whole point of the <a href=\"results.html\">Results</a> and <a href=\"targets.html\">Target Analysis</a> pages."
+    },
+    {
+      title: "6. Stress-test with the extreme set",
+      what: "The same trained models were then run on the extreme, near-light-speed test set to see whether their accuracy held up outside their comfort zone. This was repeated for an earlier version of the project where training deliberately excluded high speeds, to see a genuine \"never seen this before\" failure.",
+      why: "A model that only works inside the exact range it was trained on isn't very useful in practice. This step answers the more interesting question: does the model actually understand the underlying rule, or did it just memorize the shape of the training data? The two answers turned out to be very different across the two iterations — see <a href=\"ood.html\">Normal vs Extreme</a>."
+    },
+    {
+      title: "7. Write down what's proven vs. still a guess",
+      what: "Every finding was labelled as CONFIRMED (backed directly by a result file), CONFOUNDED (the experiment had a flaw that muddies the conclusion), or HYPOTHESIS (a plausible explanation that hasn't been separately tested yet).",
+      why: "It's easy to over-claim in a research write-up. Being explicit about confidence level means a reader — including future me — knows exactly which claims to trust immediately and which ones still need a follow-up experiment. See <a href=\"conclusions.html\">Conclusions</a>."
+    }
+  ];
+
+  document.getElementById("workflowRail").innerHTML = workflow.map(function(w, i){
+    return '<div class="workflow-item">' +
+      (i < workflow.length - 1 ? '<div class="workflow-line"></div>' : '') +
+      '<div class="workflow-badge">' + (i+1) + '</div>' +
+      '<div class="workflow-card">' +
+        '<h3>' + w.title.replace(/^\d+\.\s*/, '') + '</h3>' +
+        '<p>' + w.what + '</p>' +
+        '<div class="why"><b>Why this step exists:</b> ' + w.why + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join("");
+
+  /* ---------------- Glossary ---------------- */
+  var glossary = [
+    { cat:"physics", term:"Special relativity", sym:"—", plain:"The rulebook for how motion, time and energy behave once speeds get close to light-speed — where ordinary school physics stops being accurate.", formal:"Einstein's theory of flat-spacetime mechanics, valid for any speed below c, that this project's simulator implements exactly in one spatial dimension." },
+    { cat:"physics", term:"Speed of light (c)", sym:"c", plain:"The universe's ultimate speed limit — about 300,000 km every second. Nothing with mass can reach it.", formal:"c = 299,792,458 m/s exactly, by SI definition." },
+    { cat:"physics", term:"Beta", sym:"β = v/c", plain:"Speed written as a fraction of light-speed. β = 0.5 means \"half the speed of light.\"", formal:"Dimensionless ratio of coordinate velocity to c; always in the range (−1, 1) for a massive particle." },
+    { cat:"physics", term:"Gamma / Lorentz factor", sym:"γ", plain:"A \"stretch factor.\" It's basically 1 at everyday speeds, but shoots up toward infinity as you approach light-speed — that's why the effects of relativity are invisible in daily life but huge near c.", formal:"γ = 1/√(1−β²). Scales time dilation, length contraction and relativistic mass-energy." },
+    { cat:"physics", term:"Momentum", sym:"p", plain:"How much \"oomph\" something has while moving — a mix of how heavy it is and how fast it's going, boosted by gamma near light-speed.", formal:"p = γmv, and grows linearly in time under a constant force: p(t) = p₀ + Ft." },
+    { cat:"physics", term:"Kinetic energy", sym:"K", plain:"The energy something has purely because it's moving — the thing that turns into a crash if it suddenly stops.", formal:"K = p²c² / (E + mc²), a cancellation-safe rearrangement of K = E − mc²." },
+    { cat:"physics", term:"Total energy", sym:"E", plain:"All the energy something has: its motion energy plus the energy locked up in its own mass (Einstein's famous E = mc²).", formal:"E = √(m²c⁴ + p²c²); reduces to E = mc² at rest and E ≈ mc² + ½mv² at low speed." },
+    { cat:"physics", term:"Proper time", sym:"τ", plain:"Time as felt by the moving object itself — its own wristwatch. It always ticks slower than or equal to the clock of someone watching from outside.", formal:"dτ = dt/γ, integrated along the trajectory; τ ≤ t always." },
+    { cat:"physics", term:"Rest mass", sym:"m", plain:"How much \"stuff\" an object has when it's just sitting still — the mass value that never changes with speed.", formal:"Invariant mass in the particle's own rest frame, used throughout as the constant m in p=γmv and E=γmc²." },
+    { cat:"physics", term:"Constant force", sym:"F", plain:"A steady push that never changes strength or direction — like a rocket engine at fixed thrust — as opposed to a push that varies over time.", formal:"The engine solves dp/dt = F (relativistic Newton's second law) rather than the classical F=ma, since mass effectively resists acceleration more as speed grows." },
+    { cat:"physics", term:"Minkowski spacetime", sym:"—", plain:"Flat, empty spacetime with no gravity bending it — the simplest possible stage for relativity to play out on.", formal:"The flat 4D spacetime of special relativity; this project excludes gravity/curved spacetime (general relativity) entirely." },
+    { cat:"physics", term:"Extrapolation vs. interpolation", sym:"—", plain:"Interpolation = answering a question inside the range you've already seen examples of. Extrapolation = answering a question far outside anything you've seen — much riskier for any model.", formal:"A model interpolates within the convex hull of its training distribution and extrapolates outside it; generalization error typically grows sharply with distance from that hull." },
+    { cat:"data", term:"Out-of-distribution (OOD)", sym:"—", plain:"Test data that looks meaningfully different from anything the model trained on — the machine-learning version of \"a trick question.\"", formal:"A test set whose input distribution differs from the training distribution; whether a given set is truly OOD depends entirely on what the model actually trained on — see the Q&A below." },
+    { cat:"data", term:"Feature (input)", sym:"x", plain:"A piece of information you give the model before asking for its answer — here: mass, force, starting speed, starting β, and elapsed time.", formal:"The 5 independent variables fed into every model; standardized before training." },
+    { cat:"data", term:"Target (output / label)", sym:"y", plain:"The answer you want the model to predict — here, one of the 8 physical quantities like momentum or proper time.", formal:"The dependent variable(s) a supervised model is trained to reproduce; this project trains all models as multi-output regressors predicting all 8 targets at once." },
+    { cat:"data", term:"Train / validation / test split", sym:"—", plain:"Three separate piles of examples: one to actually learn from, one to tune decisions on, and one that's opened only once, at the very end, to get an honest final grade.", formal:"800,000 / 100,000 / 100,000 row split via sklearn.train_test_split, random_state=42." },
+    { cat:"data", term:"Distribution shift", sym:"—", plain:"When the test examples come from a noticeably different \"neighborhood\" of possible values than the training examples did.", formal:"A change in the statistical distribution of inputs (or the joint input-output relationship) between train and test sets, measured here via quartile and median-ratio comparisons." },
+    { cat:"data", term:"Log-uniform sampling", sym:"10^U(a,b)", plain:"Picking random numbers so that tiny, medium and huge values are equally likely to appear — otherwise almost every random pick would land in the \"huge\" range and tiny values would barely ever show up.", formal:"Sampling x = 10^u where u ~ Uniform(a,b), used for mass (10⁰–10⁶ kg) and force (10⁰–10¹⁰ N) so both targets span many orders of magnitude in training." },
+    { cat:"physics", term:"Catastrophic cancellation", sym:"—", plain:"A computer-math trap where subtracting two almost-identical huge numbers wipes out the tiny, meaningful difference between them — like weighing a feather by subtracting two truck weighings and trusting the last few digits.", formal:"Loss of numerical precision when subtracting two nearly-equal floating-point values; the engine rewrites formulas (e.g. position, proper time) into algebraically equivalent, cancellation-free forms to avoid it." },
+    { cat:"physics", term:"Rapidity", sym:"φ", plain:"An alternative way of measuring \"how fast,\" that — unlike beta — keeps adding up normally even at near-light speeds, which makes some internal calculations numerically better-behaved.", formal:"φ = artanh(β); rapidities add linearly under successive boosts where velocities don't. The engine's proper-time calculation uses a stable log1p-based rapidity-increment internally to avoid catastrophic cancellation." },
+    { cat:"ml", term:"\"Controlled\" (in model names)", sym:"—", plain:"Just means this project deliberately capped how large/deep the model was allowed to grow (e.g. max depth, tree count) instead of using unrestrained defaults — a way to keep the comparison between models fairer.", formal:"Refers to the constrained hyperparameters used for Random Forest and Extra Trees in this project's sweep (n_estimators=100, max_depth=20, min_samples_leaf=10) rather than library defaults." },
+    { cat:"ml", term:"Regression", sym:"—", plain:"Machine learning where the answer is a number (like \"42.7 joules\") rather than a category (like \"cat or dog\").", formal:"Supervised learning task of predicting a continuous target variable from input features." },
+    { cat:"ml", term:"Multi-output regression", sym:"—", plain:"One model predicting several numbers at once — here, all 8 physical quantities from a single pass, instead of training 8 separate models.", formal:"Regression with a vector-valued target; scikit-learn models here use MultiOutputRegressor where the base estimator doesn't natively support it." },
+    { cat:"ml", term:"R² (R-squared)", sym:"R²", plain:"A score from roughly 0 to 1 (can go negative) that says how much better the model is than just guessing the average every time. 1.0 = perfect, 0 = no better than guessing the average, negative = worse than that.", formal:"Coefficient of determination: 1 − (sum of squared residuals / total sum of squares), computed per-target on the held-out test set." },
+    { cat:"ml", term:"RMSE / MAE", sym:"—", plain:"Two ways to measure \"how far off, on average, were the predictions\" — in the same units as the thing being predicted.", formal:"RMSE = root mean squared error (penalizes large errors more); MAE = mean absolute error (treats all error sizes proportionally)." },
+    { cat:"ml", term:"Overfitting", sym:"—", plain:"When a model gets really good at the exact examples it trained on, but hasn't actually learned the general rule — like memorizing answers instead of understanding the topic.", formal:"A model whose training error is much lower than its validation/test error, indicating it has fit noise or idiosyncrasies of the training set rather than the underlying function." },
+    { cat:"ml", term:"Decision tree", sym:"—", plain:"A model that makes a prediction by asking a series of yes/no questions about the input, like a flowchart, until it reaches an answer.", formal:"A recursive binary-split predictor; here capped at max_depth=25, min_samples_leaf=10." },
+    { cat:"ml", term:"Random forest / Extra trees", sym:"—", plain:"Instead of one flowchart, grow a whole forest of slightly different ones and average their answers — usually more reliable than any single tree.", formal:"Ensembles of decision trees trained on bootstrapped samples (Random Forest) or randomized splits (Extra Trees); both configured here with 100 trees, max_depth=20." },
+    { cat:"ml", term:"Gradient boosting", sym:"—", plain:"Build trees one at a time, where each new tree's whole job is to fix the mistakes the trees before it made.", formal:"Sequential ensemble of shallow trees trained to reduce residual error; \"Hist\" gradient boosting bins feature values first for speed on large datasets." },
+    { cat:"ml", term:"Neural network / MLP", sym:"—", plain:"A model loosely inspired by brain cells: layers of simple math units, each passing a transformed signal to the next layer, that together can learn very complex, curved relationships.", formal:"A fully-connected feed-forward multilayer perceptron; this project's plain MLP has 8 hidden layers (32→32→32→28→28→24→24) and ReLU activations." },
+    { cat:"ml", term:"Polynomial features", sym:"x², x·y", plain:"Before feeding data to a model, also hand it each input squared and each pair of inputs multiplied together — giving it a head start on spotting curved relationships.", formal:"Explicit degree-2 feature expansion (5 inputs → 20 features: 5 linear + 5 squared + 10 pairwise products) fed into a matching MLP." },
+    { cat:"ml", term:"Loss / loss curve", sym:"—", plain:"A single number that measures \"how wrong\" the model currently is; training is just repeatedly nudging the model to make this number smaller. The loss curve just plots that number over time.", formal:"Mean squared error tracked per epoch for train and validation sets; a validation curve that's still falling means the model hasn't finished learning yet." },
+    { cat:"ml", term:"Epoch", sym:"—", plain:"One full pass through all of the training examples.", formal:"A single iteration over the entire training dataset during optimization; this project trained for 50 epochs." },
+    { cat:"ml", term:"Batch size", sym:"—", plain:"How many examples the model looks at before it updates its internal guesses even once. Smaller batches mean more, noisier updates per pass through the data; huge batches mean fewer, smoother updates.", formal:"Number of samples per gradient-descent step; 4,096 for the plain MLP vs. 524,288 (near full-batch) for the polynomial-feature MLP — a key confound noted in Conclusions." },
+    { cat:"ml", term:"Hyperparameter", sym:"—", plain:"A setting you choose before training starts (like how many trees, or how fast to learn) rather than something the model learns on its own.", formal:"Configuration values such as max_depth, learning_rate, n_estimators or batch_size, set manually or by search rather than learned from data." }
+  ];
+
+  var grid = document.getElementById("glossaryGrid");
+  function renderGlossary(){
+    var q = (document.getElementById("glossarySearch").value || "").toLowerCase();
+    var cat = document.querySelector(".glossary-filters button.active").getAttribute("data-cat");
+    grid.innerHTML = glossary.map(function(g){
+      var hay = (g.term + " " + g.plain + " " + g.formal).toLowerCase();
+      var visible = (cat === "all" || g.cat === cat) && (!q || hay.indexOf(q) !== -1);
+      return '<div class="glossary-card"' + (visible ? '' : ' hidden') + '>' +
+        '<div class="g-head"><span class="g-term">' + g.term + '</span><span class="g-sym">' + g.sym + '</span></div>' +
+        '<div class="g-plain">' + g.plain + '</div>' +
+        '<div class="g-formal">' + g.formal + '</div>' +
+      '</div>';
+    }).join("");
+  }
+  document.getElementById("glossarySearch").addEventListener("input", renderGlossary);
+  document.querySelectorAll(".glossary-filters button").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      document.querySelectorAll(".glossary-filters button").forEach(function(b){b.classList.remove("active");});
+      btn.classList.add("active");
+      renderGlossary();
+    });
+  });
+  renderGlossary();
+
+  /* ---------------- Q&A ---------------- */
+  var qa = [
+    { q:"Why build a whole physics engine instead of just writing formulas in a notebook?", a:"Because the ML results are only as trustworthy as the \"correct answers\" they're graded against. A standalone, independently tested, published package (<code>relativistic-simulator</code> on PyPI) forces the physics to be validated on its own — it passed independent checks like the energy-momentum invariant to an error of 3.2×10⁻¹⁵ — before a single model was trained on it. That separation of concerns is what lets this report say \"every error you see belongs to the model, not the data.\"" },
+    { q:"Why generate exactly 1,000,000 training rows?", a:"It's large enough to cover the input ranges (which span many orders of magnitude for mass and force) with reasonable density, while still being small enough to train nine different model types on a laptop-class GPU in minutes, not hours. It's a practical, not a theoretically \"optimal,\" number." },
+    { q:"Why predict all 8 physical quantities from one model instead of training 8 separate models?", a:"Partly convenience, partly a genuine question: do the targets share enough internal structure that one shared model can learn all of them at once without one target starving another of capacity? The results suggest a partial \"no\" — see the Q&A entry on gamma below and the redundant-targets finding in Conclusions." },
+    { q:"Why did the project run two completely separate dataset \"iterations\"?", a:"Iteration 1 trained only on everyday speeds (β up to 0.8) and tested on a mix including near-light-speed cases (β up to 0.999999) — a genuine test of extrapolation. It failed badly (R² as low as −1.7×10⁹ on some targets). Iteration 2 widened training itself to already include those extreme speeds, to see if the failure was really about extrapolation, or about something else. It mostly closed the gap, which is itself the project's single clearest finding: <strong>what data you train on matters more than which model you pick.</strong>" },
+    { q:"If the \"extreme\" test set is the same file in both iterations, why does it behave so differently?", a:"Because \"out-of-distribution\" isn't a property of a file — it's a property of the relationship between that file and whatever a specific model was trained on. Relative to Iteration-1 training (capped at β=0.8), the extreme file is genuinely novel territory. Relative to Iteration-2 training (which already spans up to β=0.999999), that same file is just another ordinary sample. This is exactly why the Iteration-2 neural network's extreme-test R² (0.748) came out slightly higher than its normal-test R² (0.715) — it isn't generalizing better on harder data, it's simply not facing anything new." },
+    { q:"Why sample mass and force on a log scale instead of a plain uniform range?", a:"Physically realistic masses and forces span enormous ranges — a proton and a planet aren't the \"same kind of number.\" Plain uniform sampling would put almost all examples in the largest part of the range and starve the model of small-value examples. Log-uniform sampling (10^U(0,6) for mass, 10^U(0,10) for force) makes every order of magnitude equally represented." },
+    { q:"Why compare 9 different model families instead of just picking one good one?", a:"Because which model \"wins\" turned out to depend heavily on the target. A plain decision tree beat every ensemble on momentum and kinetic energy; hist gradient boosting won almost everywhere else; linear regression was near-useless for gamma (R²=0.01) but respectable for smoother targets. A single-model study would have hidden that pattern entirely." },
+    { q:"Why did the polynomial-feature neural network score so much worse than the plain one — and why does the report say not to trust that fully?", a:"Its mean R² was 0.340 versus 0.715 for the plain MLP — but that run also used a batch size roughly 128× larger, meaning far fewer weight updates per epoch, and its training loss was still visibly falling at epoch 50 while the plain MLP had already plateaued. In plain terms: it may have simply been trained for too few effective steps, not proven that extra polynomial features hurt. It's labeled CONFOUNDED, not CONFIRMED, in the Conclusions for exactly this reason." },
+    { q:"Why is gamma so much harder to learn than a target like proper time, even though both come from the same simulator?", a:"Gamma is unbounded and shoots toward infinity as β approaches 1 — a sharply curving, ever-steeper function that's hard for smoother models to track. Proper time, by contrast, is a smooth running total that only ever asymptotes to a finite ratio with elapsed time — it never explodes. The shape of the function you're asking a model to learn matters as much as how much data you give it." },
+    { q:"Why do velocity and beta always get exactly the same accuracy score?", a:"Because β is just velocity divided by the constant c — an exact straight-line rescaling, not an independently learned relationship. Every model's R² for the two came out numerically identical once checked row by row, meaning this project's \"8-target\" setup is really only 7 independent learning problems wearing 8 labels." },
+    { q:"Why can R² go negative — doesn't a score usually stop at 0?", a:"R² compares a model to the simplest possible baseline: always guessing the training average. A score of 0 means \"no better than that baseline\"; a negative score means \"worse than just guessing the average every time.\" That's what genuine extrapolation failure looks like — some Iteration-1 models scored as low as −1.7×10⁹ on the extreme test, meaning their predictions were wildly, catastrophically wrong outside the training range." },
+    { q:"What would change your mind, or is planned next?", a:"Several open items are logged as future work rather than settled: matching batch sizes to fairly re-test the polynomial-feature network, training gamma/kinetic-energy on log-transformed targets to test the dynamic-range hypothesis, dropping the redundant beta/velocity target to free up model capacity, and building a genuinely new extrapolation test for Iteration 2 (since its old one is no longer really \"extreme\"). See the full list on <a href=\"conclusions.html\">Conclusions</a>." }
+  ];
+
+  document.getElementById("qaList").innerHTML = qa.map(function(item, i){
+    return '<details class="qa-item"' + (i === 0 ? " open" : "") + '>' +
+      '<summary><span class="q-mark">Q</span><span>' + item.q + '</span><span class="q-caret">⌄</span></summary>' +
+      '<div class="qa-body"><p>' + item.a + '</p></div>' +
+    '</details>';
+  }).join("");
+
+  /* ---------------- Findings ---------------- */
+  var findings = [
+    { tag:"badge-good", label:"Widening training data fixed a catastrophic failure", body:"Restricting Iteration-1 training to β≤0.8 caused R² as low as −1.7×10⁹ when tested at near-light-speed. Simply including those speeds in Iteration-2 training turned this into strong in-distribution performance — the single biggest swing in the whole project, bigger than any difference between model types." },
+    { tag:"badge-warn", label:"Some quantities are just harder to learn than others", body:"Even with full-range training, gamma's R² ranged from 0.01 to 0.98 depending on the model, and kinetic energy never exceeded R²=0.781 with any model tried. These look like real information/shape limits, not model-choice mistakes." },
+    { tag:"badge-brand", label:"No single model wins everywhere", body:"Hist Gradient Boosting was the strongest all-rounder, but a plain Decision Tree quietly won on momentum and kinetic energy specifically. Model ranking depends on the target, not just the model." },
+    { tag:"badge-neutral", label:"\"Extreme\" isn't a fixed label", body:"The same 10,000-row test file was genuinely out-of-distribution for Iteration-1 models and essentially ordinary for Iteration-2 models — because OOD-ness depends on what the model actually trained on, not on how a file is named." }
+  ];
+  document.getElementById("findingsGrid").innerHTML = findings.map(function(f){
+    return '<div class="card"><span class="badge ' + f.tag + '">FINDING</span><h3 style="margin-top:.6rem">' + f.label + '</h3><p>' + f.body + '</p></div>';
+  }).join("");
+
+  /* ---------------- Map to detail pages ---------------- */
+  var map = [
+    { href:"physics.html", icon:"⚛️", title:"The Physics", body:"The governing equations, and an interactive slider to feel how gamma explodes as β→1." },
+    { href:"physics-engine.html", icon:"🧮", title:"Physics Engine", body:"The relativistic-simulator package itself: API, validation, and why it avoids naive formulas." },
+    { href:"datasets.html", icon:"🗂️", title:"Datasets", body:"Exactly how both dataset iterations were generated, split, and how their distributions differ." },
+    { href:"models.html", icon:"🤖", title:"Models", body:"All 9 architectures and their hyperparameters, training configs and loss curves." },
+    { href:"results.html", icon:"📈", title:"Results", body:"Interactive model-vs-target comparison across R², RMSE and MAE." },
+    { href:"ood.html", icon:"🧭", title:"Normal vs Extreme", body:"The extrapolation story in full — both the failure and the non-failure." },
+    { href:"targets.html", icon:"🎯", title:"Target Analysis", body:"A per-quantity deep dive: definition, distribution, best/worst model, open question." },
+    { href:"conclusions.html", icon:"✅", title:"Conclusions", body:"Every claim, labeled CONFIRMED / CONFOUNDED / HYPOTHESIS, plus future work." },
+    { href:"overview.html", icon:"🕒", title:"Overview & Timeline", body:"The chronological, experiment-by-experiment record of both iterations." }
+  ];
+  document.getElementById("mapGrid").innerHTML = map.map(function(m){
+    return '<a class="card card-link" href="' + m.href + '"><div class="card-icon">' + m.icon + '</div><h3>' + m.title + '</h3><p>' + m.body + '</p></a>';
+  }).join("");
+
+  /* ---------------- TOC scroll spy ---------------- */
+  var tocLinks = Array.prototype.slice.call(document.querySelectorAll("#researchToc a"));
+  var blocks = tocLinks.map(function(l){ return document.querySelector(l.getAttribute("href")); });
+  function onScroll(){
+    var pos = window.scrollY + 120;
+    var activeIdx = 0;
+    blocks.forEach(function(b, i){ if (b && b.offsetTop <= pos) activeIdx = i; });
+    tocLinks.forEach(function(l, i){ l.classList.toggle("active", i === activeIdx); });
+  }
+  document.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>

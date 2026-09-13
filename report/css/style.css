@@ -367,3 +367,125 @@ input[type=range]{ flex:1; accent-color: var(--brand); }
   border-radius:999px; padding:.5rem .9rem; font-weight:700; font-size:.85rem; color: var(--text);
 }
 .link-pill:hover{ border-color: var(--brand); color: var(--brand); text-decoration:none; }
+
+/* ===================================================================
+   Research page — plain-English notes / dashboard components
+   =================================================================== */
+
+/* Sticky "reading" layout: TOC rail + content */
+.research-shell{ display:grid; grid-template-columns: 220px minmax(0,1fr); gap: 2.4rem; align-items:start; }
+@media (max-width: 980px){ .research-shell{ grid-template-columns: 1fr; } }
+.research-toc{
+  position: sticky; top: 80px; display:flex; flex-direction:column; gap:.15rem;
+  border-left: 2px solid var(--border); padding-left: .9rem; max-height: calc(100vh - 100px); overflow-y:auto;
+}
+@media (max-width: 980px){ .research-toc{ position:static; flex-direction:row; flex-wrap:wrap; border-left:none; padding-left:0; max-height:none; gap:.4rem; } }
+.research-toc a{
+  font-size:.82rem; font-weight:600; color: var(--text-faint); padding:.3rem .1rem;
+}
+@media (max-width: 980px){ .research-toc a{ padding:.35rem .7rem; border:1px solid var(--border); border-radius:999px; background:var(--surface); } }
+.research-toc a:hover{ color: var(--brand); text-decoration:none; }
+.research-toc a.active{ color: var(--brand); }
+.research-toc .toc-num{ font-family: var(--font-mono); font-size:.72rem; opacity:.6; margin-right:.35rem; }
+
+.research-block{ scroll-margin-top: 80px; margin-bottom: 3.4rem; }
+.research-block > h2{ display:flex; align-items:center; gap:.6rem; }
+.research-block .block-icon{ font-size:1.3rem; }
+
+.plain-tag{
+  display:inline-flex; align-items:center; gap:.35rem; font-size:.7rem; font-weight:800; text-transform:uppercase;
+  letter-spacing:.06em; color: var(--brand-2); background: color-mix(in srgb, var(--brand-2) 14%, transparent);
+  padding:.28rem .6rem; border-radius:999px; margin-bottom:.7rem;
+}
+
+/* Plain-English note box, reused on every deep-dive page */
+.plain-note{
+  border:1px dashed color-mix(in srgb, var(--brand-2) 55%, var(--border)); background: color-mix(in srgb, var(--brand-2) 6%, var(--surface));
+  border-radius: var(--radius-md); padding: 1rem 1.2rem; margin: 1.2rem 0 1.6rem; font-size:.92rem; color: var(--text-dim);
+}
+.plain-note strong{ color: var(--text); }
+.plain-note .plain-tag{ margin-bottom:.5rem; }
+
+/* Workflow rail — numbered, with a "why" line under every step */
+.workflow-rail{ display:flex; flex-direction:column; gap: 0; }
+.workflow-item{ display:grid; grid-template-columns: 46px 1fr; gap: 1rem; position:relative; padding-bottom: 1.8rem; }
+.workflow-item:not(:last-child) .workflow-line{
+  position:absolute; left:22px; top:46px; bottom:-4px; width:2px; background: var(--border);
+}
+.workflow-badge{
+  width:46px;height:46px;border-radius:50%; background: var(--surface); border:2px solid var(--brand);
+  display:flex; align-items:center; justify-content:center; font-weight:800; color: var(--brand); flex:none; z-index:1;
+}
+.workflow-card{ background: var(--surface); border:1px solid var(--border); border-radius: var(--radius-md); padding: 1.1rem 1.3rem; box-shadow: var(--shadow-sm); }
+.workflow-card h3{ margin-bottom:.3rem; }
+.workflow-card .why{
+  margin-top: .7rem; padding-top: .7rem; border-top: 1px dashed var(--border); font-size: .88rem;
+}
+.workflow-card .why b{ color: var(--brand); }
+
+/* Glossary */
+.glossary-tools{ display:flex; gap:.6rem; flex-wrap:wrap; margin-bottom:1.2rem; align-items:center; }
+.glossary-search{
+  flex:1; min-width:200px; font: inherit; padding:.6rem .85rem; border-radius:9px; border:1px solid var(--border);
+  background: var(--surface); color: var(--text);
+}
+.glossary-filters{ display:flex; gap:.35rem; flex-wrap:wrap; }
+.glossary-filters button{
+  font: inherit; font-size:.8rem; font-weight:700; border:1px solid var(--border); background: var(--surface); color: var(--text-dim);
+  padding:.5rem .8rem; border-radius:999px; cursor:pointer;
+}
+.glossary-filters button.active{ background: var(--brand); color:#fff; border-color: var(--brand); }
+.glossary-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+@media (max-width: 980px){ .glossary-grid{ grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 640px){ .glossary-grid{ grid-template-columns: 1fr; } }
+.glossary-card{
+  background: var(--surface); border:1px solid var(--border); border-radius: var(--radius-md);
+  padding: 1.1rem 1.2rem; box-shadow: var(--shadow-sm);
+}
+.glossary-card .g-head{ display:flex; align-items:baseline; justify-content:space-between; gap:.5rem; }
+.glossary-card .g-term{ font-weight:800; font-size:1rem; }
+.glossary-card .g-sym{ font-family: var(--font-mono); color: var(--brand); font-size:1.05rem; }
+.glossary-card .g-plain{ font-size:.88rem; margin-top:.5rem; color: var(--text); }
+.glossary-card .g-plain::before{ content:"In plain words: "; font-weight:700; color: var(--brand-2); }
+.glossary-card .g-formal{ font-size:.82rem; margin-top:.55rem; color: var(--text-faint); border-top:1px dashed var(--border); padding-top:.5rem; }
+.glossary-card[hidden]{ display:none; }
+
+/* Q&A accordion ("why did I do this") */
+.qa-list{ display:flex; flex-direction:column; gap:.6rem; }
+.qa-item{
+  border:1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); box-shadow: var(--shadow-sm); overflow:hidden;
+}
+.qa-item > summary{
+  list-style:none; cursor:pointer; padding: 1rem 1.2rem; display:flex; gap:.7rem; align-items:flex-start; font-weight:700;
+}
+.qa-item > summary::-webkit-details-marker{ display:none; }
+.qa-item .q-mark{
+  flex:none; width:26px;height:26px;border-radius:50%; background: color-mix(in srgb, var(--brand) 14%, transparent);
+  color: var(--brand); display:flex; align-items:center; justify-content:center; font-size:.85rem; font-weight:800;
+}
+.qa-item .q-caret{ margin-left:auto; color: var(--text-faint); transition: transform .15s ease; flex:none; }
+.qa-item[open] .q-caret{ transform: rotate(180deg); }
+.qa-item .qa-body{ padding: 0 1.2rem 1.1rem 3.3rem; color: var(--text-dim); font-size:.92rem; }
+.qa-item .qa-body p{ margin: 0 0 .6rem; color: inherit; }
+.qa-item .qa-body p:last-child{ margin-bottom:0; }
+
+/* Mini Q&A used on the deep-dive pages (compact, non-accordion) */
+.mini-qa{ display:grid; gap:.8rem; grid-template-columns: repeat(2,1fr); margin: 1.4rem 0; }
+@media (max-width: 760px){ .mini-qa{ grid-template-columns: 1fr; } }
+.mini-qa .mq{ background: var(--surface-2); border:1px solid var(--border); border-radius: var(--radius-md); padding: .9rem 1.05rem; }
+.mini-qa .mq .mq-q{ font-weight:700; font-size:.88rem; color: var(--text); }
+.mini-qa .mq .mq-q::before{ content:"Q — "; color: var(--brand); }
+.mini-qa .mq .mq-a{ font-size:.86rem; margin-top:.35rem; }
+.mini-qa .mq .mq-a::before{ content:"A — "; color: var(--brand-2); font-weight:700; }
+
+/* Keyword pill used inline in prose */
+.kw{
+  font-weight:700; color: var(--brand); border-bottom: 1px dashed color-mix(in srgb, var(--brand) 50%, transparent); cursor:help;
+}
+
+.research-hero{
+  position:relative; overflow:hidden; padding: 3.6rem 0 2.2rem;
+  background:
+    radial-gradient(800px 460px at 8% -10%, color-mix(in srgb, var(--accent-purple) 18%, transparent), transparent 60%),
+    radial-gradient(700px 420px at 100% 0%, color-mix(in srgb, var(--brand) 16%, transparent), transparent 55%);
+}

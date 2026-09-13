@@ -17,6 +17,14 @@
       <span class="eyebrow">Results</span>
       <h1>Model comparison — normal held-out test</h1>
       <p class="lede">All 9 models trained on <code>physics_data.npy</code> (Iteration 2), evaluated on the same 100,000-row held-out normal test split. Select a target and metric to compare every model, or view the full table.</p>
+      <div class="plain-note">
+        <span class="plain-tag">In plain words</span><br>
+        This is the report card. <span class="kw" title="A score from ~0 to 1 (can go negative). 1 = perfect predictions, 0 = no better than guessing the average, negative = worse than that.">R²</span> close to 1 is great; near 0 means the model isn't really learning the pattern. Pick any physical quantity and metric below to see exactly who did best at predicting it.
+      </div>
+      <div class="mini-qa">
+        <div class="mq"><div class="mq-q">Why show R², RMSE and MAE instead of just one number?</div><div class="mq-a">R² tells you "how much better than guessing," while RMSE/MAE tell you the actual size of the error in real units (metres, joules, etc.) — together they give a fuller picture than either alone.</div></div>
+        <div class="mq"><div class="mq-q">Is the "best" model always the best choice?</div><div class="mq-a">Not necessarily — the best overall model isn't always the best for every individual target. Check the <a href="targets.html">Target Analysis</a> page for the per-quantity winner.</div></div>
+      </div>
     </div>
   </section>
 

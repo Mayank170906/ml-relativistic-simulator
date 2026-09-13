@@ -17,6 +17,14 @@
       <span class="eyebrow">Models</span>
       <h1>Nine architectures, one shared dataset</h1>
       <p class="lede">All Iteration-2 models were trained on the same 800,000-row split of <code>physics_data.npy</code> and evaluated on the same held-out 100,000-row normal test split, so results are directly comparable.</p>
+      <div class="plain-note">
+        <span class="plain-tag">In plain words</span><br>
+        Nine different "guessing strategies" were given the exact same practice questions and the exact same final exam. This page is the profile of each strategy — not who won (that's on <a href="results.html">Results</a>), but how each one actually works and what settings it used.
+      </div>
+      <div class="mini-qa">
+        <div class="mq"><div class="mq-q">Why test 9 models instead of picking the "best" one upfront?</div><div class="mq-a">Because which model wins depends on the target — a simple Decision Tree quietly beat every ensemble on momentum and kinetic energy, which a single-model study would have missed entirely.</div></div>
+        <div class="mq"><div class="mq-q">What's the difference between the two neural networks?</div><div class="mq-a">One sees the 5 raw inputs directly; the other first expands them into 20 extra "squared and multiplied" features, hoping to give it a head start on curved relationships.</div></div>
+      </div>
     </div>
   </section>
 
