@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Datasets</title>
+<meta name="description" content="How the training and evaluation datasets were generated, their shapes, splits, and measured distribution shift.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main>
+  <section class="section-tight">
+    <div class="wrap">
+      <p class="breadcrumbs"><a href="index.html">Home</a> / Datasets</p>
+      <span class="eyebrow">Datasets</span>
+      <h1>Two generations, one physics engine</h1>
+      <p class="lede">Both dataset iterations were produced by <code>relativistic_simulator</code> — the difference is entirely in how the input parameter ranges (especially β) were sampled.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-nav">
+        <a href="#era1">Iteration 1</a><a href="#era2">Iteration 2 (current)</a><a href="#explorer">Feature explorer</a><a href="#shift">Distribution shift</a><a href="#validation">Validation</a>
+      </div>
+
+      <h2 id="era1">Iteration 1 — default-range dataset</h2>
+      <div class="two-col">
+        <div class="card">
+          <p><strong>Training file:</strong> <code>relativistic_dataset_1m.npy</code> — 1,000,000 rows</p>
+          <p><strong>Generated via:</strong> <code>generate_dataset(n_samples=1_000_000, random_seed=42)</code></p>
+          <p><strong>Ranges:</strong> mass ∈ [100, 10,000] kg · force ∈ [10⁴, 10⁷] N · β ∈ [0, 0.8] · time ∈ [0, 100] s</p>
+        </div>
+        <div class="card">
+          <p><strong>Test file:</strong> <code>relativistic_extreme_test_10k.npy</code> — 10,000 rows</p>
+          <p><strong>Generated via:</strong> a custom <code>rng(2026)</code> loop calling <code>simulate(..., method="analytic")</code> per row</p>
+          <p><strong>β mixture:</strong> 70% U(0, 0.8) · 20% U(0.8, 0.95) · 10% U(0.95, 0.999999), shuffled</p>
+        </div>
+      </div>
+      <div class="callout warn" style="margin-top:1rem"><strong>Genuine extrapolation:</strong> training β never exceeds 0.8, but the test set reaches β = 0.999999. Models trained on Iteration 1 are evaluated well outside their training range — see <a href="conclusions.html">Conclusions</a> for what happened.</div>
+
+      <hr class="sep">
+
+      <h2 id="era2">Iteration 2 — physics_data.npy (current)</h2>
+      <div class="two-col">
+        <div class="card">
+          <p><strong>Training file:</strong> <code>physics_data.npy</code> — 1,000,000 rows, 13 columns, float64</p>
+          <p><strong>Generated via:</strong> a custom <code>rng(2026)</code> loop calling <code>simulate()</code> directly per row (bypassing <code>generate_dataset()</code> to control the β mixture)</p>
+          <p><strong>Formulas:</strong> mass = 10^U(0,6) kg · force = ±10^U(0,10) N · time = 10^U(-4,5) s</p>
+          <p><strong>β mixture:</strong> 70% U(0, 0.8) · 20% U(0.8, 0.95) · 10% U(0.95, 0.999999), shuffled — training itself now spans the full relativistic regime.</p>
+        </div>
+        <div class="card">
+          <p><strong>Split (notebooks/ml.ipynb, neuralnetwork.ipynb):</strong></p>
+          <div class="grid grid-3" style="gap:.6rem">
+            <div class="metric-card"><div class="metric-num">800,000</div><div class="metric-lbl">Train</div></div>
+            <div class="metric-card"><div class="metric-num">100,000</div><div class="metric-lbl">Validation</div></div>
+            <div class="metric-card"><div class="metric-num">100,000</div><div class="metric-lbl">Normal test</div></div>
+          </div>
+          <p style="margin-top:.7rem"><code>sklearn.train_test_split</code>, test_size=0.2 then 0.5, random_state=42.</p>
+        </div>
+      </div>
+      <div class="callout" style="margin-top:1rem"><strong>Important nuance:</strong> the "extreme" evaluation file (<code>relativistic_extreme_test_10k.npy</code>) is the same file used in Iteration 1 — but because Iteration-2 training now also spans β up to 0.999999, this is no longer a true out-of-distribution test for the current models. It is an independently re-drawn 10,000-row sample from an overlapping distribution. See <a href="ood.html">Normal vs Extreme</a> for what this means for the results.</div>
+
+      <hr class="sep">
+
+      <h2 id="explorer">Feature explorer</h2>
+      <p>Per-feature/target statistics measured directly from <code>data/image_folder/distribution_summary.csv</code> (Iteration 2 train vs. the extreme_test_10k evaluation set).</p>
+      <div class="controls">
+        <div class="control">
+          <label for="featureSelect">Feature / target</label>
+          <select id="featureSelect"></select>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="chart-card">
+          <div class="chart-box short"><canvas id="quartileChart"></canvas></div>
+        </div>
+        <div class="card" id="featureStatsCard"></div>
+      </div>
+
+      <hr class="sep">
+
+      <h2 id="shift">Measured distribution shift (train vs. extreme test)</h2>
+      <p>These plots were generated directly by the project's data-analysis notebook and are shown here verbatim.</p>
+      <div class="controls">
+        <div class="control">
+          <label for="imgSelect">Feature</label>
+          <select id="imgSelect"></select>
+        </div>
+      </div>
+      <figure class="image-figure">
+        <img id="distImg" src="assets/images/beta_train_vs_extreme_test.png" alt="Distribution comparison">
+        <figcaption id="distImgCaption">β: train vs. extreme test</figcaption>
+      </figure>
+
+      <hr class="sep">
+
+      <h2 id="validation">Dataset validation</h2>
+      <p>The engine's <code>dataset.validate()</code> report for the full 1,000,000-row Iteration-2 dataset (from <code>data_gen.ipynb</code>):</p>
+      <div class="grid grid-4" id="validationCards"></div>
+    </div>
+  </section>
+</main>
+
+<div class="page-prevnext wrap">
+  <a href="physics-engine.html"><span class="lbl">Previous</span>Physics Engine</a>
+  <a class="next" href="models.html"><span class="lbl">Next</span>Models</a>
+</div>
+
+<footer id="site-footer" class="site-footer"></footer>
+
+<script src="js/data.js"></script>
+<script src="js/chart.umd.min.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+<script>
+(function(){
+  var stats = SITE_DATA.DATASET_STATS.distribution_summary;
+  var facts = SITE_DATA.DATASET_FACTS;
+
+  // feature explorer
+  var sel = document.getElementById("featureSelect");
+  stats.forEach(function(r){
+    var o = document.createElement("option"); o.value = r.feature; o.textContent = r.feature; sel.appendChild(o);
+  });
+  var qctx = document.getElementById("quartileChart");
+  var qchart;
+  function renderFeature(name){
+    var r = stats.find(function(x){ return x.feature === name; });
+    qchart && qchart.destroy();
+    qchart = ChartHelpers.barChart(qctx, ["Q25","Median","Q75"], [
+      { label: "Train", data: [r.train_q25, r.train_median, r.train_q75], backgroundColor: "#4f5bff" },
+      { label: "Extreme test", data: [r.test_q25, r.test_median, r.test_q75], backgroundColor: "#ff6a3d" }
+    ]);
+    document.getElementById("featureStatsCard").innerHTML =
+      '<h3>' + name + '</h3>' +
+      '<p>Train median: <span class="mono">' + r.train_median.toExponential(4) + '</span></p>' +
+      '<p>Extreme-test median: <span class="mono">' + r.test_median.toExponential(4) + '</span></p>' +
+      '<p>Test / train median ratio: <span class="mono">' + r.test_median_div_train_median.toFixed(4) + '</span></p>' +
+      '<p style="font-size:.82rem">A ratio far from 1 indicates the extreme-test sample lands in a different part of the distribution than a typical training row.</p>';
+  }
+  sel.addEventListener("change", function(){ renderFeature(sel.value); });
+  sel.value = "beta"; renderFeature("beta");
+
+  // image explorer
+  var imgSel = document.getElementById("imgSelect");
+  var imgFeatures = ["mass","force","initial_velocity","initial_beta","time","position","velocity","beta","gamma","momentum","kinetic_energy","total_energy","proper_time","median_ratio"];
+  imgFeatures.forEach(function(f){
+    var o = document.createElement("option"); o.value = f; o.textContent = f; imgSel.appendChild(o);
+  });
+  imgSel.value = "beta";
+  imgSel.addEventListener("change", function(){
+    document.getElementById("distImg").src = "assets/images/" + imgSel.value + "_train_vs_extreme_test.png";
+    document.getElementById("distImgCaption").textContent = imgSel.value + ": train vs. extreme test";
+  });
+
+  // validation cards
+  var v = facts.validation;
+  document.getElementById("validationCards").innerHTML = [
+    ["Rows validated", v.n_rows.toLocaleString()],
+    ["Velocity bound violations", v.max_velocity_bound_violation],
+    ["Max energy–momentum error", v.max_energy_momentum_error.toExponential(3)],
+    ["All values finite", v.all_finite ? "Yes" : "No"]
+  ].map(function(pair){
+    return '<div class="card metric-card"><div class="metric-num">' + pair[1] + '</div><div class="metric-lbl">' + pair[0] + '</div></div>';
+  }).join("");
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Results</title>
+<meta name="description" content="Interactive model comparison across all targets and metrics on the normal held-out test set.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main>
+  <section class="section-tight">
+    <div class="wrap">
+      <p class="breadcrumbs"><a href="index.html">Home</a> / Results</p>
+      <span class="eyebrow">Results</span>
+      <h1>Model comparison — normal held-out test</h1>
+      <p class="lede">All 9 models trained on <code>physics_data.npy</code> (Iteration 2), evaluated on the same 100,000-row held-out normal test split. Select a target and metric to compare every model, or view the full table.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="controls">
+        <div class="control">
+          <label for="targetSelect">Target</label>
+          <select id="targetSelect"></select>
+        </div>
+        <div class="control">
+          <label for="metricSelect">Metric</label>
+          <div class="segmented" id="metricSeg">
+            <button data-metric="R2" class="active">R²</button>
+            <button data-metric="RMSE">RMSE</button>
+            <button data-metric="MAE">MAE</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-box"><canvas id="compareChart"></canvas></div>
+        <p class="chart-legend-note" id="metricNote"></p>
+      </div>
+
+      <div class="callout" style="margin-top:1rem" id="rankNote"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">Full table</span>
+        <h2>Every model × target × metric</h2>
+        <p>Click a column header to sort. Best R² per target is highlighted.</p>
+      </div>
+      <div class="controls">
+        <div class="control">
+          <label for="modelFilter">Filter model</label>
+          <select id="modelFilter"><option value="">All models</option></select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table data-sortable id="fullTable">
+          <thead>
+            <tr>
+              <th data-key="model" data-type="string">Model <span class="arrow"></span></th>
+              <th data-key="target" data-type="string">Target <span class="arrow"></span></th>
+              <th data-key="r2" data-type="number">R² <span class="arrow"></span></th>
+              <th data-key="rmse" data-type="number">RMSE <span class="arrow"></span></th>
+              <th data-key="mae" data-type="number">MAE <span class="arrow"></span></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">Overall ranking</span>
+        <h2>Mean R² across all 8 targets (scikit-learn sweep)</h2>
+      </div>
+      <div class="chart-card">
+        <div class="chart-box"><canvas id="overallRankChart"></canvas></div>
+      </div>
+      <p class="chart-legend-note">The plain neural network (mean R² 0.715 normal / 0.748 extreme) and polynomial-feature neural network (0.340 normal) were trained and evaluated separately from this sweep — see <a href="models.html">Models</a> and <a href="ood.html">OOD</a>.</p>
+    </div>
+  </section>
+</main>
+
+<div class="page-prevnext wrap">
+  <a href="models.html"><span class="lbl">Previous</span>Models</a>
+  <a class="next" href="ood.html"><span class="lbl">Next</span>Normal vs Extreme</a>
+</div>
+
+<footer id="site-footer" class="site-footer"></footer>
+
+<script src="js/data.js"></script>
+<script src="js/chart.umd.min.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+<script src="js/results.js"></script>
+</body>
+</html>

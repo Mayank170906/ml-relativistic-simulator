@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Models</title>
+<meta name="description" content="Every model architecture trained in this project: scikit-learn regressors, a feed-forward MLP, and a polynomial-feature MLP.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main>
+  <section class="section-tight">
+    <div class="wrap">
+      <p class="breadcrumbs"><a href="index.html">Home</a> / Models</p>
+      <span class="eyebrow">Models</span>
+      <h1>Nine architectures, one shared dataset</h1>
+      <p class="lede">All Iteration-2 models were trained on the same 800,000-row split of <code>physics_data.npy</code> and evaluated on the same held-out 100,000-row normal test split, so results are directly comparable.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-nav">
+        <a href="#sklearn">Scikit-learn sweep</a><a href="#nn">Neural network</a><a href="#polynn">Polynomial NN</a>
+      </div>
+
+      <h2 id="sklearn">Scikit-learn regressor sweep</h2>
+      <p><code>notebooks/ml.ipynb</code> — 7 regressors, each wrapped in <code>MultiOutputRegressor</code> where needed, trained to predict all 8 targets simultaneously.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Model</th><th>Key hyperparameters</th></tr></thead>
+          <tbody>
+            <tr><td>Linear Regression</td><td class="num">defaults, on standardized inputs/outputs</td></tr>
+            <tr><td>Polynomial Degree 2</td><td class="num">PolynomialFeatures(degree=2, include_bias=False) → LinearRegression</td></tr>
+            <tr><td>Decision Tree</td><td class="num">max_depth=25, min_samples_leaf=10</td></tr>
+            <tr><td>Gradient Boosting</td><td class="num">n_estimators=200, learning_rate=0.05, max_depth=5, min_samples_leaf=10</td></tr>
+            <tr><td>Hist Gradient Boosting</td><td class="num">max_iter=200, learning_rate=0.05, max_leaf_nodes=31, min_samples_leaf=20, l2=1e-3</td></tr>
+            <tr><td>Random Forest (Controlled)</td><td class="num">n_estimators=100, max_depth=20, min_samples_leaf=10, max_features=1.0</td></tr>
+            <tr><td>Extra Trees (Controlled)</td><td class="num">n_estimators=100, max_depth=20, min_samples_leaf=10, max_features=1.0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:.8rem">Full per-target metrics are on the <a href="results.html">Results</a> page.</p>
+
+      <hr class="sep">
+
+      <h2 id="nn">Neural network — plain MLP</h2>
+      <p><code>notebooks/neuralnetwork.ipynb</code> — a compact fully-connected regressor mapping the 5 raw (standardized) inputs directly to all 8 targets.</p>
+      <div class="two-col">
+        <div class="card">
+          <h3>Architecture</h3>
+          <div class="arch-diagram">
+            <div class="arch-layer io">5 (input)</div><div class="arch-arrow">↓</div>
+            <div class="arch-layer">32</div><div class="arch-arrow">↓</div>
+            <div class="arch-layer">32</div><div class="arch-arrow">↓</div>
+            <div class="arch-layer">32</div><div class="arch-arrow">↓</div>
+            <div class="arch-layer">28</div><div class="arch-arrow">↓</div>
+            <div class="arch-layer">28</div><div class="arch-arrow">↓</div>
+            <div class="arch-layer">24</div><div class="arch-arrow">↓</div>
+            <div class="arch-layer">24</div><div class="arch-arrow">↓</div>
+            <div class="arch-layer io">8 (output)</div>
+          </div>
+          <p style="text-align:center;margin-top:.6rem">ReLU activations · 5,536 trainable parameters</p>
+        </div>
+        <div class="card">
+          <h3>Training configuration</h3>
+          <p><strong>Optimizer:</strong> AdamW, lr=0.001, weight_decay=1e-5</p>
+          <p><strong>Scheduler:</strong> ReduceLROnPlateau (factor 0.5, patience 3)</p>
+          <p><strong>Batch size:</strong> 4,096 · <strong>Epochs:</strong> 50 (early-stop patience 8, not triggered)</p>
+          <p><strong>Device:</strong> CUDA — Tesla T4</p>
+          <p><strong>Training time:</strong> 6.88 minutes</p>
+          <p><strong>Best validation loss:</strong> 0.2097 (scaled MSE)</p>
+        </div>
+      </div>
+      <div class="chart-card" style="margin-top:1rem">
+        <div class="chart-box"><canvas id="nnLossChart"></canvas></div>
+      </div>
+
+      <hr class="sep">
+
+      <h2 id="polynn">Polynomial-feature neural network (degree 2)</h2>
+      <p><code>notebooks/PolynomialNeuralNetwork.ipynb</code> — the same 5 inputs, explicitly expanded to 20 degree-2 polynomial features before an MLP of matching depth.</p>
+      <div class="two-col">
+        <div>
+          <h3>Feature expansion</h3>
+          <div class="pipeline">
+            <div class="step"><div class="n">5 inputs</div>x₁ … x₅</div>
+            <div class="step"><div class="n">+5 squared</div>x₁² … x₅²</div>
+            <div class="step"><div class="n">+10 pairwise</div>x₁x₂, x₁x₃ … x₄x₅</div>
+            <div class="step"><div class="n">= 20 features</div>fed to the MLP</div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Architecture</h3>
+          <div class="arch-diagram">
+            <div class="arch-layer io">20 (poly features)</div><div class="arch-arrow">↓</div>
+            <div class="arch-layer">32 → 32 → 32 → 28 → 28 → 24 → 24</div><div class="arch-arrow">↓</div>
+            <div class="arch-layer io">8 (output)</div>
+          </div>
+          <p style="text-align:center;margin-top:.6rem">6,016 trainable parameters</p>
+        </div>
+      </div>
+      <div class="two-col" style="margin-top:1rem">
+        <div class="card">
+          <h3>Training configuration</h3>
+          <p><strong>Optimizer:</strong> AdamW, lr=0.001, weight_decay=1e-5 (same scheduler as plain MLP)</p>
+          <p><strong>Batch size:</strong> <span class="badge badge-warn">524,288</span> (near full-batch) · <strong>Epochs:</strong> 50</p>
+          <p><strong>Training time:</strong> 8.53 minutes · <strong>Best validation loss:</strong> 0.5662 (still decreasing at epoch 50)</p>
+        </div>
+        <div class="callout warn">
+          <strong>Confound, not a fair comparison:</strong> this run used a batch size ~128× larger than the plain MLP, giving far fewer gradient updates per epoch. The validation loss curve below never plateaus, so this experiment mainly shows an under-trained model, not necessarily that polynomial features hurt — see <a href="conclusions.html">Conclusions</a>.
+        </div>
+      </div>
+      <div class="chart-card" style="margin-top:1rem">
+        <div class="chart-box"><canvas id="polyLossChart"></canvas></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="page-prevnext wrap">
+  <a href="datasets.html"><span class="lbl">Previous</span>Datasets</a>
+  <a class="next" href="results.html"><span class="lbl">Next</span>Results</a>
+</div>
+
+<footer id="site-footer" class="site-footer"></footer>
+
+<script src="js/data.js"></script>
+<script src="js/chart.umd.min.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+<script>
+(function(){
+  var curves = SITE_DATA.TRAINING_CURVES;
+  var epochs = Array.from({length:50}, function(_,i){ return i+1; });
+
+  ChartHelpers.lineChart(document.getElementById("nnLossChart"), epochs, [
+    { label: "Train loss", data: curves.neural_network.train_loss },
+    { label: "Val loss", data: curves.neural_network.val_loss }
+  ], { plugins: { title: { display:true, text:"Plain MLP — MSE loss per epoch" } } });
+
+  ChartHelpers.lineChart(document.getElementById("polyLossChart"), epochs, [
+    { label: "Train loss", data: curves.polynomial_nn.train_loss },
+    { label: "Val loss", data: curves.polynomial_nn.val_loss }
+  ], { plugins: { title: { display:true, text:"Polynomial-feature MLP — MSE loss per epoch (still descending at epoch 50)" } } });
+})();
+</script>
+</body>
+</html>

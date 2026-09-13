@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conclusions</title>
+<meta name="description" content="Failure analysis, new observations, future work, and evidence-based conclusions from this project.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main>
+  <section class="section-tight">
+    <div class="wrap">
+      <p class="breadcrumbs"><a href="index.html">Home</a> / Conclusions</p>
+      <span class="eyebrow">Conclusions</span>
+      <h1>What the evidence supports — and what remains open</h1>
+      <p class="lede">Every claim below traces back to a specific notebook, CSV, or model file in this repository. Where something is a hypothesis rather than a proven result, it's labeled as such.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-nav">
+        <a href="#failure">Failure analysis</a><a href="#observations">New observations</a><a href="#future">Future work</a><a href="#conclusions">Conclusions</a>
+      </div>
+
+      <h2 id="failure">Failure analysis</h2>
+      <div class="grid grid-2">
+        <div class="card">
+          <span class="badge badge-bad">CONFIRMED</span>
+          <h3 style="margin-top:.5rem">Extrapolation beyond the training β range fails catastrophically</h3>
+          <p>Iteration-1 models (trained only on β≤0.8) reached R² as low as −1.7×10⁹ on some targets when evaluated on β up to 0.999999. Polynomial regression (degrees 3–4) and even gradient-boosted trees produced negative R² on position, gamma, momentum, and both energy targets. Only velocity/beta, which stay bounded even at extreme β, degraded gracefully (R²≈0.45–0.50). <span class="mono" style="font-size:.78rem">Source: data/extreme_test_results.csv, notebooks-oldData/evaluation.ipynb</span></p>
+        </div>
+        <div class="card">
+          <span class="badge badge-bad">CONFIRMED</span>
+          <h3 style="margin-top:.5rem">Gamma and kinetic energy are the two hardest targets in-distribution</h3>
+          <p>Even with training data spanning the full β range (Iteration 2), gamma's R² ranges from 0.01 (Linear Regression) to 0.98 (Hist Gradient Boosting) — the widest spread of any target — and kinetic energy's best achievable R² across all 7 sklearn models tops out at 0.781, the lowest ceiling of any target. <span class="mono" style="font-size:.78rem">Source: notebooks/physics_data_sklearn_results.csv</span></p>
+        </div>
+        <div class="card">
+          <span class="badge badge-warn">CONFOUNDED</span>
+          <h3 style="margin-top:.5rem">The polynomial-feature MLP underperforms the plain MLP — but not on equal footing</h3>
+          <p>Mean R² dropped from 0.715 (plain MLP) to 0.340 (polynomial-feature MLP) on the normal test. However, the polynomial run used a batch size of 524,288 versus 4,096 for the plain MLP — far fewer gradient updates per epoch — and its validation loss was still descending at epoch 50, unlike the plain MLP which had plateaued. This experiment cannot cleanly isolate whether explicit polynomial features hurt, help, or are neutral. <span class="mono" style="font-size:.78rem">Source: notebooks/PolynomialNeuralNetwork.ipynb, notebooks/neuralnetwork.ipynb</span></p>
+        </div>
+        <div class="card">
+          <span class="badge badge-brand">HYPOTHESIS</span>
+          <h3 style="margin-top:.5rem">Log-uniform mass/force sampling may unevenly weight the loss for unbounded targets</h3>
+          <p>Momentum and energy span many orders of magnitude under the project's log-uniform mass (10⁰–10⁶) and force (10⁰–10¹⁰) sampling. This plausibly explains why these targets underperform bounded ones (velocity, beta, proper time) even though momentum is linear in its inputs by construction — but this project did not run a controlled ablation (e.g. training on log-target space) to confirm it.</p>
+        </div>
+      </div>
+
+      <hr class="sep">
+
+      <h2 id="observations">New observations</h2>
+      <div class="grid grid-2">
+        <div class="card">
+          <span class="badge badge-good">OBSERVATION</span>
+          <h3 style="margin-top:.5rem">"Extreme" test sets are not automatically out-of-distribution</h3>
+          <p>The same physical file, <code>relativistic_extreme_test_10k.npy</code>, is a genuine extrapolation test against Iteration-1 training (β≤0.8) but not against Iteration-2 training (β up to 0.999999 already included). The plain MLP's extreme-test R² (0.748) actually exceeds its normal-test R² (0.715), which only makes sense once you check what each test set actually contains relative to training — a reminder that "OOD" labels need to be verified against the specific training distribution, not assumed from a filename.</p>
+        </div>
+        <div class="card">
+          <span class="badge badge-good">OBSERVATION</span>
+          <h3 style="margin-top:.5rem">Velocity and beta are redundant learning targets</h3>
+          <p>Because β=v/c is an exact linear rescaling, every sklearn model produces numerically identical R² for velocity and beta (verified row-by-row in physics_data_sklearn_results.csv). The 8-target multi-output setup is effectively learning 7 independent quantities, not 8.</p>
+        </div>
+        <div class="card">
+          <span class="badge badge-good">OBSERVATION</span>
+          <h3 style="margin-top:.5rem">Simple tree models sometimes beat boosted ensembles on specific targets</h3>
+          <p>A plain Decision Tree (max_depth=25) achieves the best R² of any sklearn model on both momentum (0.803) and kinetic energy (0.781) — beating both Random Forest and Extra Trees, and losing only marginally to the boosted models on other targets. Model ranking is target-dependent, not universal.</p>
+        </div>
+        <div class="card">
+          <span class="badge badge-good">OBSERVATION</span>
+          <h3 style="margin-top:.5rem">The physics engine's own validation is exact, not approximate</h3>
+          <p>The dataset's ground truth passed the engine's independent validation checks (max energy-momentum invariant error 3.2×10⁻¹⁵, zero velocity-bound violations) — meaning every error reported throughout this site is attributable to the learned models, not to label noise in the simulator.</p>
+        </div>
+      </div>
+
+      <hr class="sep">
+
+      <h2 id="future">Future work</h2>
+      <ul>
+        <li>Re-run the polynomial-feature MLP with a batch size matched to the plain MLP (4,096) to isolate the effect of explicit polynomial features from the training-budget confound.</li>
+        <li>Train gamma and kinetic energy on log-transformed targets to test the log-uniform-sampling hypothesis above.</li>
+        <li>Drop the redundant beta (or velocity) target and re-measure whether the freed model capacity improves the remaining 7 targets.</li>
+        <li>Generate a genuinely held-out extrapolation set for Iteration 2 (e.g. β restricted to (0.999999, 1) or masses/forces outside the current log-uniform ranges) to test true OOD generalization under the widened training distribution.</li>
+        <li>Extend the scikit-learn sweep's normal/extreme comparison (currently only run for the two neural networks) to the tree-based models for a complete like-for-like comparison.</li>
+      </ul>
+
+      <hr class="sep">
+
+      <h2 id="conclusions">Conclusions</h2>
+      <div class="callout good">
+        <p>Standard regression models — from linear regression to gradient-boosted trees to small MLPs — can recover several relativistic quantities from this simulator's synthetic data to R² > 0.95 (position, velocity, beta, gamma, proper time with the best model), when the training distribution covers the range being evaluated.</p>
+        <p>The project's clearest, best-supported finding is architectural rather than about any one model: <strong>the composition of the training distribution matters more than model choice</strong>. Widening the training β range between Iteration 1 and Iteration 2 turned a catastrophic extrapolation failure (R² as low as −1.7×10⁹) into strong in-distribution performance across the same target set — a bigger swing than any difference between model families within either iteration.</p>
+        <p>Momentum, kinetic energy, and total energy remain comparatively hard even in-distribution, and gamma shows the widest spread across model families — open problems this report frames as hypotheses for future iterations, not settled conclusions.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="page-prevnext wrap">
+  <a href="targets.html"><span class="lbl">Previous</span>Target Analysis</a>
+  <a class="next" href="index.html"><span class="lbl">Back to</span>Home</a>
+</div>
+
+<footer id="site-footer" class="site-footer"></footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

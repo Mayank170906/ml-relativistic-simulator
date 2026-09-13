@@ -1,0 +1,102 @@
+{
+  "experiments": [
+    {
+      "id": "exp1",
+      "order": 1,
+      "era": "era1",
+      "notebook": "notebooks-oldData/dataanalysis.ipynb",
+      "title": "Exploratory data analysis",
+      "objective": "Characterize the first synthetic dataset (relativistic_dataset_1m.npy) and the held-out extreme_test_10k.npy before modeling.",
+      "dataset": "relativistic_dataset_1m.npy (train) / relativistic_extreme_test_10k.npy (test)",
+      "model": "—",
+      "config": "pandas describe() over 1,000,000 x 13 and 10,000 x 13 arrays",
+      "result": "Confirmed the test set spans a much wider beta range (up to 0.999999) than the training set (capped at 0.8).",
+      "observation": "The test set is not sampled from the same distribution as training — this is a genuine out-of-distribution / extrapolation setup, not just a held-out split.",
+      "next": "Train baseline sklearn regressors on the beta≤ 0.8 training set."
+    },
+    {
+      "id": "exp2",
+      "order": 2,
+      "era": "era1",
+      "notebook": "notebooks-oldData/linearregression.ipynb, tree.ipynb, PolynomialRegression.ipynb, neuralnetwork.ipynb",
+      "title": "Baseline models on the narrow-range dataset",
+      "objective": "Train linear regression, polynomial regression (degree 2-4), decision tree, random forest, extra trees, gradient boosting and hist gradient boosting on relativistic_dataset_1m.npy.",
+      "dataset": "relativistic_dataset_1m.npy",
+      "model": "9 scikit-learn regressors",
+      "config": "Default / lightly-tuned scikit-learn hyperparameters",
+      "result": "Models fit the training distribution (β ≤ 0.8) reasonably.",
+      "observation": "Held out for the next experiment's extrapolation test.",
+      "next": "Evaluate all 9 models on the high-beta extreme_test_10k.npy set."
+    },
+    {
+      "id": "exp3",
+      "order": 3,
+      "era": "era1",
+      "notebook": "notebooks-oldData/evaluation.ipynb",
+      "title": "Extrapolation stress test",
+      "objective": "Evaluate all 9 era-1 models on extreme_test_10k.npy, whose beta range (up to 0.999999) lies far outside the beta≤ 0.8 training range.",
+      "dataset": "extreme_test_10k.npy (10,000 rows)",
+      "model": "linear regression, polynomial degree 2/3/4, decision tree, random forest, extra trees, gradient boosting, hist gradient boosting",
+      "config": "data/extreme_test_results.csv (72 rows: 9 models × 8 targets)",
+      "result": "Catastrophic extrapolation failure for most models on most targets: polynomial regression degree 3/4 reach R² as low as -1.7×10⁹; gradient boosting and hist gradient boosting go negative on position, gamma, momentum, kinetic/total energy and proper time. Velocity and beta degrade more gracefully (R² ≈ 0.45-0.50 for most models).",
+      "observation": "The notebook's own inline note calls this 'a very interesting result for your research: excellent interpolation but poor extrapolation.' This directly motivated widening the training beta range.",
+      "next": "Redesign data generation so the training distribution itself covers the high-beta regime."
+    },
+    {
+      "id": "exp4",
+      "order": 4,
+      "era": "era2",
+      "notebook": "data/data_gen.ipynb",
+      "title": "Redesigned dataset generation",
+      "objective": "Generate physics_data.npy with a beta mixture (70% β∈[0,0.8], 20% β∈[0.8,0.95], 10% β∈[0.95,0.999999]) so training itself spans the relativistic regime, and validate it against the simulator's own consistency checks.",
+      "dataset": "physics_data.npy (1,000,000 rows)",
+      "model": "— (data generation only, via relativistic_simulator.simulate())",
+      "config": "mass=10^U(0,6) kg, force=±10^U(0,10) N, time=10^U(-4,5) s, seed=2026",
+      "result": "dataset.validate() / manual validation passed: max energy-momentum invariant error 3.2×10⁻¹⁵, all values finite, velocity bound respected.",
+      "observation": "Ground truth is exact (closed-form relativistic solution), so all downstream error is attributable to the learned models, not label noise.",
+      "next": "Re-train scikit-learn models on the new, wider dataset."
+    },
+    {
+      "id": "exp5",
+      "order": 5,
+      "era": "era2",
+      "notebook": "notebooks/ml.ipynb",
+      "title": "Scikit-learn model sweep on physics_data",
+      "objective": "Train 7 scikit-learn regressors on an 800k/100k/100k train/val/test split of physics_data.npy and evaluate on the held-out normal test split.",
+      "dataset": "physics_data.npy — 800,000 train / 100,000 val / 100,000 test",
+      "model": "Linear Regression, Polynomial Degree 2, Decision Tree, Gradient Boosting, Hist Gradient Boosting, Random Forest (controlled), Extra Trees (controlled)",
+      "config": "Gradient Boosting: 200 estimators, lr 0.05, max_depth 5; Hist GB: max_iter 200, lr 0.05, max_leaf_nodes 31; Random/Extra Trees: 100 estimators, max_depth 20, min_samples_leaf 10",
+      "result": "Hist Gradient Boosting best overall (R² up to 0.99 for position/proper_time); mean R² ranking: Gradient Boosting 0.894 > Hist GB 0.790 > Decision Tree 0.679 > Random Forest 0.654 > Extra Trees 0.652 > Polynomial-2 0.372 > Linear 0.295.",
+      "observation": "Gamma remained the hardest target across every model family (best R² 0.98 with Hist GB, but several models under 0.2).",
+      "next": "Try neural networks on the same widened dataset, including a normal-vs-extreme comparison."
+    },
+    {
+      "id": "exp6",
+      "order": 6,
+      "era": "era2",
+      "notebook": "notebooks/neuralnetwork.ipynb",
+      "title": "Feed-forward neural network",
+      "objective": "Train a compact fully-connected MLP (5→32→32→32→28→28→24→24→8, 5,536 params) on physics_data.npy and test both on the normal held-out split and on relativistic_extreme_test_10k.npy.",
+      "dataset": "physics_data.npy (train/val/test) + relativistic_extreme_test_10k.npy",
+      "model": "PhysicsNeuralNetwork (PyTorch, ReLU MLP)",
+      "config": "AdamW lr=0.001, weight_decay=1e-5, ReduceLROnPlateau (factor 0.5, patience 3), batch size 4096, 50 epochs, GPU: Tesla T4",
+      "result": "Normal test mean R² ≈ 0.72 (proper_time 0.923, position 0.858); extreme test performed comparably (proper_time 0.935, position 0.853) — no meaningful degradation.",
+      "observation": "Because era-2 training already spans beta up to 0.999999, the 'extreme' set is no longer a true extrapolation test — it is a comparably-distributed resample, which explains the lack of degradation.",
+      "next": "Test whether explicit polynomial feature engineering helps the same architecture."
+    },
+    {
+      "id": "exp7",
+      "order": 7,
+      "era": "era2",
+      "notebook": "notebooks/PolynomialNeuralNetwork.ipynb",
+      "title": "Degree-2 polynomial-feature neural network",
+      "objective": "Expand the 5 input features to 20 (5 linear + 5 squared + 10 pairwise cross terms) and feed them into an MLP of the same depth (20→32→32→32→28→28→24→24→8, 6,016 params).",
+      "dataset": "physics_data.npy + relativistic_extreme_test_10k.npy",
+      "model": "PolynomialNeuralNetwork (PyTorch)",
+      "config": "Same optimizer/scheduler as exp6, but batch size 524,288 (near full-batch), 50 epochs",
+      "result": "Substantially worse than the plain MLP: normal test mean R² ≈ 0.29 (gamma R² = -0.042), extreme test similar (≈ 0.31, gamma R² = -0.014). Validation loss was still decreasing at epoch 50 (0.566), unlike the plain MLP which plateaued near 0.21.",
+      "observation": "The very large batch size (524,288) sharply reduced the number of gradient updates per epoch, leaving the network under-trained relative to the plain-MLP run — the polynomial features themselves were not tested with a matched training budget.",
+      "next": "Consolidate findings into the final comparison and note the confound for future work."
+    }
+  ]
+}

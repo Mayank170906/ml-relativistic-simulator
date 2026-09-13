@@ -1,0 +1,69 @@
+{
+  "targets": [
+    {
+      "id": "position",
+      "label": "Position",
+      "symbol": "x(t)",
+      "unit": "m",
+      "definition": "Displacement of the particle at time t under the constant applied force.",
+      "equation": "x(t) = x\u2080 + c\\,t\\,\\dfrac{q + q\u2080}{\\gamma + \\gamma\u2080},\\quad q = p/mc",
+      "note": "Evaluated in this cancellation-free form to stay accurate at high beta / small impulse."
+    },
+    {
+      "id": "velocity",
+      "label": "Velocity",
+      "symbol": "v(t)",
+      "unit": "m/s",
+      "definition": "Instantaneous coordinate velocity of the particle.",
+      "equation": "v = c\\,\\dfrac{q}{\\gamma}"
+    },
+    {
+      "id": "beta",
+      "label": "Beta",
+      "symbol": "\u03b2",
+      "unit": "dimensionless",
+      "definition": "Velocity expressed as a fraction of the speed of light.",
+      "equation": "\\beta = v / c"
+    },
+    {
+      "id": "gamma",
+      "label": "Gamma",
+      "symbol": "\u03b3",
+      "unit": "dimensionless",
+      "definition": "Lorentz factor \u2014 the relativistic time-dilation / mass-energy scaling factor. Diverges as \u03b2\u21921.",
+      "equation": "\\gamma = \\sqrt{1+q^2} = \\dfrac{1}{\\sqrt{1-\\beta^2}}"
+    },
+    {
+      "id": "momentum",
+      "label": "Momentum",
+      "symbol": "p(t)",
+      "unit": "kg\u00b7m/s",
+      "definition": "Relativistic momentum, linear in time under a constant force.",
+      "equation": "p(t) = p\u2080 + F t,\\quad p=\\gamma m v"
+    },
+    {
+      "id": "kinetic_energy",
+      "label": "Kinetic Energy",
+      "symbol": "K(t)",
+      "unit": "J",
+      "definition": "Kinetic energy computed via a rationalized identity to avoid catastrophic cancellation.",
+      "equation": "K = \\dfrac{p^2 c^2}{E + mc^2}"
+    },
+    {
+      "id": "total_energy",
+      "label": "Total Energy",
+      "symbol": "E(t)",
+      "unit": "J",
+      "definition": "Total relativistic energy (rest + kinetic).",
+      "equation": "E = \\sqrt{m^2c^4 + p^2c^2}"
+    },
+    {
+      "id": "proper_time",
+      "label": "Proper Time",
+      "symbol": "\u03c4",
+      "unit": "s",
+      "definition": "Elapsed time in the particle's own rest frame; always \u2264 coordinate time t.",
+      "equation": "d\\tau = dt/\\gamma"
+    }
+  ]
+}

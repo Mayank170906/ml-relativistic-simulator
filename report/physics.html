@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Physics</title>
+<meta name="description" content="The special-relativistic model this project learns from: constant-force dynamics, beta, gamma, momentum, energy and proper time.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main>
+  <section class="section-tight">
+    <div class="wrap">
+      <p class="breadcrumbs"><a href="index.html">Home</a> / Physics</p>
+      <span class="eyebrow">The physics</span>
+      <h1>1D special relativity under a constant force</h1>
+      <p class="lede">The ground truth for every sample in this project comes from one governing law: <code>dp/dt = F</code> with <code>p = γmv</code> — not the classical <code>F = ma</code>. This page walks through the exact closed-form solution and lets you explore how β, γ, momentum and energy move as a particle approaches the speed of light.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap two-col">
+      <div>
+        <h2>Governing equation</h2>
+        <p>For a particle of rest mass <em>m</em> under constant force <em>F</em>, momentum grows linearly in time:</p>
+        <div class="eq">p(t) = p₀ + F·t,  &nbsp; q = p / (m·c),  &nbsp; γ = √(1 + q²),  &nbsp; v = c·q/γ</div>
+        <p>Total and kinetic energy follow from the same momentum:</p>
+        <div class="eq">E = √(m²c⁴ + p²c²)  &nbsp;&nbsp;  K = p²c² / (E + mc²)</div>
+        <p>Position is evaluated in a cancellation-free form that stays accurate at high β and small impulse:</p>
+        <div class="eq">x(t) = x₀ + c·t·(q + q₀) / (γ + γ₀)</div>
+        <p>Proper time accumulates from <code>dτ = dt/γ</code>, using a stable <code>log1p</code> rapidity-increment form to avoid cancellation when the impulse is tiny relative to the initial momentum.</p>
+      </div>
+      <div>
+        <h2>Scientific scope</h2>
+        <div class="card">
+          <p><strong>Included:</strong> flat Minkowski spacetime, one spatial dimension, constant rest mass, an externally applied constant 1D force, SI units.</p>
+          <p><strong>Excluded:</strong> gravity, curved spacetime, electromagnetic-field models, radiation reaction, variable mass, quantum effects, faster-than-light / spacelike trajectories.</p>
+          <p><strong>Numerical precision:</strong> IEEE-754 float64. States are rejected rather than clipped when they cannot be represented as strictly subluminal — the engine never silently clips to the light cone.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">Interactive</span>
+        <h2>Physics explorer: β → γ, momentum, energy</h2>
+        <p>Drag the slider to set the initial speed ratio β = v/c for a 1,000 kg particle and see how the Lorentz factor and relativistic quantities respond as β → 1.</p>
+      </div>
+      <div class="card">
+        <div class="controls">
+          <div class="control" style="flex:1;min-width:260px">
+            <label for="betaSlider">Beta (β = v / c)</label>
+            <div class="slider-wrap">
+              <input type="range" id="betaSlider" min="0" max="0.999999" step="0.000001" value="0.5">
+              <span class="mono" id="betaVal" style="min-width:80px">0.500000</span>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-4">
+          <div class="metric-card"><div class="metric-num" id="gammaVal">1.1547</div><div class="metric-lbl">Gamma (γ)</div></div>
+          <div class="metric-card"><div class="metric-num" id="velVal">—</div><div class="metric-lbl">Velocity (m/s)</div></div>
+          <div class="metric-card"><div class="metric-num" id="momVal">—</div><div class="metric-lbl">Momentum (kg·m/s), m = 1000 kg</div></div>
+          <div class="metric-card"><div class="metric-num" id="keVal">—</div><div class="metric-lbl">Kinetic energy (J)</div></div>
+        </div>
+        <div class="chart-box" style="margin-top:1.2rem"><canvas id="gammaCurveChart"></canvas></div>
+        <p class="chart-legend-note">γ = 1/√(1−β²) — the curve is fixed; the marker moves with your slider. Note how γ stays near 1 for most of the range and only diverges sharply once β exceeds ≈0.95 — precisely the regime this project's "extreme" data emphasizes.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="page-prevnext wrap">
+  <a href="overview.html"><span class="lbl">Previous</span>Overview & Timeline</a>
+  <a class="next" href="physics-engine.html"><span class="lbl">Next</span>Physics Engine</a>
+</div>
+
+<footer id="site-footer" class="site-footer"></footer>
+
+<script src="js/data.js"></script>
+<script src="js/chart.umd.min.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+<script>
+(function(){
+  var C = 299792458.0;
+  var mass = 1000;
+  var slider = document.getElementById("betaSlider");
+  var betaVal = document.getElementById("betaVal");
+  var gammaVal = document.getElementById("gammaVal");
+  var velVal = document.getElementById("velVal");
+  var momVal = document.getElementById("momVal");
+  var keVal = document.getElementById("keVal");
+
+  function gammaOf(beta){ return 1/Math.sqrt(1-beta*beta); }
+  function fmt(n){
+    if (Math.abs(n) >= 1e6 || (Math.abs(n) < 1e-3 && n !== 0)) return n.toExponential(3);
+    return n.toLocaleString(undefined, {maximumFractionDigits: 3});
+  }
+
+  var betaCurve = [];
+  for (var i=0;i<=200;i++){
+    var b = i/200 * 0.999;
+    betaCurve.push({x:b, y: gammaOf(b)});
+  }
+
+  var ctx = document.getElementById("gammaCurveChart");
+  var chart = new Chart(ctx, {
+    type: "line",
+    data: { datasets: [
+      { label: "γ(β)", data: betaCurve, borderColor: "#4f5bff", backgroundColor: "#4f5bff", pointRadius:0, borderWidth:2, tension:.15 },
+      { label: "Current β", data: [{x: 0.5, y: gammaOf(0.5)}], borderColor:"#ff6a3d", backgroundColor:"#ff6a3d", pointRadius:6, showLine:false }
+    ]},
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      parsing:false,
+      scales: {
+        x: { type:"linear", title:{display:true,text:"β"}, min:0, max:1 },
+        y: { title:{display:true,text:"γ"} }
+      }
+    }
+  });
+
+  function update(){
+    var beta = parseFloat(slider.value);
+    var gamma = gammaOf(beta);
+    var v = beta * C;
+    var p = gamma * mass * v;
+    var E = gamma * mass * C * C;
+    var K = E - mass*C*C;
+    betaVal.textContent = beta.toFixed(6);
+    gammaVal.textContent = gamma.toFixed(4);
+    velVal.textContent = fmt(v);
+    momVal.textContent = fmt(p);
+    keVal.textContent = fmt(K);
+    chart.data.datasets[1].data = [{x: beta, y: Math.min(gamma, 40)}];
+    chart.options.scales.y.max = beta > 0.97 ? undefined : 40;
+    chart.update();
+  }
+  slider.addEventListener("input", update);
+  update();
+})();
+</script>
+</body>
+</html>

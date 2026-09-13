@@ -1,0 +1,600 @@
+{
+ "sklearn_normal": [
+  {
+   "model": "Linear Regression",
+   "target": "position",
+   "RMSE": 2822741148259.767,
+   "MAE": 915393780229.7327,
+   "R2": 0.3039111119711826
+  },
+  {
+   "model": "Linear Regression",
+   "target": "velocity",
+   "RMSE": 91177705.36160372,
+   "MAE": 38671459.72316535,
+   "R2": 0.49963601707600624
+  },
+  {
+   "model": "Linear Regression",
+   "target": "beta",
+   "RMSE": 0.3041360879118704,
+   "MAE": 0.1289941047254943,
+   "R2": 0.49963601707600613
+  },
+  {
+   "model": "Linear Regression",
+   "target": "gamma",
+   "RMSE": 13415.826989576952,
+   "MAE": 1078.2670490208625,
+   "R2": 0.011572543593402318
+  },
+  {
+   "model": "Linear Regression",
+   "target": "momentum",
+   "RMSE": 215696596939312.97,
+   "MAE": 41917147836537.96,
+   "R2": 0.11749686220557709
+  },
+  {
+   "model": "Linear Regression",
+   "target": "kinetic_energy",
+   "RMSE": 6.32325379483633e+22,
+   "MAE": 1.0737664370771635e+22,
+   "R2": 0.059168330738749386
+  },
+  {
+   "model": "Linear Regression",
+   "target": "total_energy",
+   "RMSE": 6.32325379483633e+22,
+   "MAE": 1.0737664370771596e+22,
+   "R2": 0.19096611820417675
+  },
+  {
+   "model": "Linear Regression",
+   "target": "proper_time",
+   "RMSE": 5504.367650263636,
+   "MAE": 2029.3005652754175,
+   "R2": 0.6801570200954359
+  },
+  {
+   "model": "Polynomial Degree 2",
+   "target": "position",
+   "RMSE": 2367145409345.403,
+   "MAE": 517190514067.8673,
+   "R2": 0.5104777166777956
+  },
+  {
+   "model": "Polynomial Degree 2",
+   "target": "velocity",
+   "RMSE": 88062584.69098018,
+   "MAE": 36038463.53004854,
+   "R2": 0.5332422038686951
+  },
+  {
+   "model": "Polynomial Degree 2",
+   "target": "beta",
+   "RMSE": 0.29374516383257443,
+   "MAE": 0.12021137479732236,
+   "R2": 0.533242203868695
+  },
+  {
+   "model": "Polynomial Degree 2",
+   "target": "gamma",
+   "RMSE": 13348.768090061745,
+   "MAE": 1415.2037205437905,
+   "R2": 0.021429140637024613
+  },
+  {
+   "model": "Polynomial Degree 2",
+   "target": "momentum",
+   "RMSE": 201799099231495.8,
+   "MAE": 28724300092543.215,
+   "R2": 0.22755401811844211
+  },
+  {
+   "model": "Polynomial Degree 2",
+   "target": "kinetic_energy",
+   "RMSE": 6.064111305097343e+22,
+   "MAE": 9.059462089903012e+21,
+   "R2": 0.13470333639116627
+  },
+  {
+   "model": "Polynomial Degree 2",
+   "target": "total_energy",
+   "RMSE": 6.064111305097344e+22,
+   "MAE": 9.059462089902969e+21,
+   "R2": 0.2559196915489478
+  },
+  {
+   "model": "Polynomial Degree 2",
+   "target": "proper_time",
+   "RMSE": 4785.417268943673,
+   "MAE": 1490.7140109650934,
+   "R2": 0.7582527288883237
+  },
+  {
+   "model": "Decision Tree",
+   "target": "position",
+   "RMSE": 1870202063831.2622,
+   "MAE": 514739458916.56616,
+   "R2": 0.6944377801395274
+  },
+  {
+   "model": "Decision Tree",
+   "target": "velocity",
+   "RMSE": 65367760.58869939,
+   "MAE": 29491821.02717394,
+   "R2": 0.7428207425218241
+  },
+  {
+   "model": "Decision Tree",
+   "target": "beta",
+   "RMSE": 0.21804337915898936,
+   "MAE": 0.09837412596675109,
+   "R2": 0.7428207425218241
+  },
+  {
+   "model": "Decision Tree",
+   "target": "gamma",
+   "RMSE": 12540.250860027876,
+   "MAE": 706.4880073229178,
+   "R2": 0.1363806757927688
+  },
+  {
+   "model": "Decision Tree",
+   "target": "momentum",
+   "RMSE": 101896990802031.75,
+   "MAE": 2187272971108.0312,
+   "R2": 0.8030516307662637
+  },
+  {
+   "model": "Decision Tree",
+   "target": "kinetic_energy",
+   "RMSE": 3.0473762514256804e+22,
+   "MAE": 5.4968020902058806e+20,
+   "R2": 0.7814841929715624
+  },
+  {
+   "model": "Decision Tree",
+   "target": "total_energy",
+   "RMSE": 3.0492504387133987e+22,
+   "MAE": 5.752542612809124e+20,
+   "R2": 0.8118641008999148
+  },
+  {
+   "model": "Decision Tree",
+   "target": "proper_time",
+   "RMSE": 5185.173602247961,
+   "MAE": 1605.7871817905527,
+   "R2": 0.7161763648053809
+  },
+  {
+   "model": "Gradient Boosting",
+   "target": "position",
+   "RMSE": 534014414609.1708,
+   "MAE": 109200373861.63847,
+   "R2": 0.9750868551709412
+  },
+  {
+   "model": "Gradient Boosting",
+   "target": "velocity",
+   "RMSE": 33177846.224715002,
+   "MAE": 13255431.618002363,
+   "R2": 0.9337470677572882
+  },
+  {
+   "model": "Gradient Boosting",
+   "target": "beta",
+   "RMSE": 0.11066938256570483,
+   "MAE": 0.04421536054119933,
+   "R2": 0.9337470677572882
+  },
+  {
+   "model": "Gradient Boosting",
+   "target": "gamma",
+   "RMSE": 2936.0597753114534,
+   "MAE": 314.33665689397776,
+   "R2": 0.9526587534727073
+  },
+  {
+   "model": "Gradient Boosting",
+   "target": "momentum",
+   "RMSE": 105310204236785.17,
+   "MAE": 2669680382824.985,
+   "R2": 0.7896364061132405
+  },
+  {
+   "model": "Gradient Boosting",
+   "target": "kinetic_energy",
+   "RMSE": 3.174960190061464e+22,
+   "MAE": 9.51585409751489e+20,
+   "R2": 0.7628040499995603
+  },
+  {
+   "model": "Gradient Boosting",
+   "target": "total_energy",
+   "RMSE": 2.956156357046146e+22,
+   "MAE": 8.855894798809007e+20,
+   "R2": 0.8231763767416349
+  },
+  {
+   "model": "Gradient Boosting",
+   "target": "proper_time",
+   "RMSE": 1214.9393987215824,
+   "MAE": 287.15577899807585,
+   "R2": 0.9844177134300445
+  },
+  {
+   "model": "Hist Gradient Boosting",
+   "target": "position",
+   "RMSE": 342384758678.0048,
+   "MAE": 73201605208.72697,
+   "R2": 0.9897587860272848
+  },
+  {
+   "model": "Hist Gradient Boosting",
+   "target": "velocity",
+   "RMSE": 23770131.40221693,
+   "MAE": 8475237.835648835,
+   "R2": 0.9659927206101159
+  },
+  {
+   "model": "Hist Gradient Boosting",
+   "target": "beta",
+   "RMSE": 0.07928862373760914,
+   "MAE": 0.028270350401620507,
+   "R2": 0.9659927206114949
+  },
+  {
+   "model": "Hist Gradient Boosting",
+   "target": "gamma",
+   "RMSE": 1893.2079620102604,
+   "MAE": 110.24897158800528,
+   "R2": 0.9803163086152971
+  },
+  {
+   "model": "Hist Gradient Boosting",
+   "target": "momentum",
+   "RMSE": 165066172789644.78,
+   "MAE": 7527140045229.348,
+   "R2": 0.4831722365325605
+  },
+  {
+   "model": "Hist Gradient Boosting",
+   "target": "kinetic_energy",
+   "RMSE": 4.92830834937845e+22,
+   "MAE": 1.9325871034338063e+21,
+   "R2": 0.42848656245911476
+  },
+  {
+   "model": "Hist Gradient Boosting",
+   "target": "total_energy",
+   "RMSE": 4.9055764464165236e+22,
+   "MAE": 2.045479130554202e+21,
+   "R2": 0.5130710687828153
+  },
+  {
+   "model": "Hist Gradient Boosting",
+   "target": "proper_time",
+   "RMSE": 805.3735814468696,
+   "MAE": 192.72593197944403,
+   "R2": 0.9931527416508367
+  },
+  {
+   "model": "Random Forest Controlled",
+   "target": "position",
+   "RMSE": 1919189174277.8542,
+   "MAE": 522501692050.5516,
+   "R2": 0.6782206552176928
+  },
+  {
+   "model": "Random Forest Controlled",
+   "target": "velocity",
+   "RMSE": 78532272.50736737,
+   "MAE": 42095109.313607015,
+   "R2": 0.6288024901006446
+  },
+  {
+   "model": "Random Forest Controlled",
+   "target": "beta",
+   "RMSE": 0.2619554642277471,
+   "MAE": 0.14041417050460625,
+   "R2": 0.6288024901006446
+  },
+  {
+   "model": "Random Forest Controlled",
+   "target": "gamma",
+   "RMSE": 12216.733540864576,
+   "MAE": 683.353653969832,
+   "R2": 0.18036573499726627
+  },
+  {
+   "model": "Random Forest Controlled",
+   "target": "momentum",
+   "RMSE": 103725662860633.94,
+   "MAE": 1480338192004.3994,
+   "R2": 0.795919218135473
+  },
+  {
+   "model": "Random Forest Controlled",
+   "target": "kinetic_energy",
+   "RMSE": 3.1067194805578893e+22,
+   "MAE": 3.730364318782226e+20,
+   "R2": 0.7728907712877232
+  },
+  {
+   "model": "Random Forest Controlled",
+   "target": "total_energy",
+   "RMSE": 3.1050112454934806e+22,
+   "MAE": 3.8208981909670835e+20,
+   "R2": 0.804920408224647
+  },
+  {
+   "model": "Random Forest Controlled",
+   "target": "proper_time",
+   "RMSE": 4937.336109525988,
+   "MAE": 1568.8665353111965,
+   "R2": 0.7426599736217029
+  },
+  {
+   "model": "Extra Trees Controlled",
+   "target": "position",
+   "RMSE": 1866708038468.9175,
+   "MAE": 505400312946.282,
+   "R2": 0.6955784534919582
+  },
+  {
+   "model": "Extra Trees Controlled",
+   "target": "velocity",
+   "RMSE": 69372699.88040607,
+   "MAE": 36950212.36202597,
+   "R2": 0.7103417395604597
+  },
+  {
+   "model": "Extra Trees Controlled",
+   "target": "beta",
+   "RMSE": 0.23140241867060599,
+   "MAE": 0.12325264153918761,
+   "R2": 0.7103417395604597
+  },
+  {
+   "model": "Extra Trees Controlled",
+   "target": "gamma",
+   "RMSE": 12180.645622952332,
+   "MAE": 692.0391453495185,
+   "R2": 0.18520094014060773
+  },
+  {
+   "model": "Extra Trees Controlled",
+   "target": "momentum",
+   "RMSE": 123618985790106.52,
+   "MAE": 1394847731199.5562,
+   "R2": 0.7101321668415028
+  },
+  {
+   "model": "Extra Trees Controlled",
+   "target": "kinetic_energy",
+   "RMSE": 3.702521954508423e+22,
+   "MAE": 3.6861976191635784e+20,
+   "R2": 0.677428505851661
+  },
+  {
+   "model": "Extra Trees Controlled",
+   "target": "total_energy",
+   "RMSE": 3.7018552243185617e+22,
+   "MAE": 3.750996142419852e+20,
+   "R2": 0.7227162982968056
+  },
+  {
+   "model": "Extra Trees Controlled",
+   "target": "proper_time",
+   "RMSE": 4324.616761869448,
+   "MAE": 1337.0027468107235,
+   "R2": 0.8025681522919157
+  }
+ ],
+ "neural_network": {
+  "normal": [
+   {
+    "Target": "position",
+    "RMSE": 1273853252062.0508,
+    "MAE": 300042637264.8124,
+    "R2": 0.857840043678026
+   },
+   {
+    "Target": "velocity",
+    "RMSE": 54745697.10296107,
+    "MAE": 21978512.961412303,
+    "R2": 0.8204017811573213
+   },
+   {
+    "Target": "beta",
+    "RMSE": 0.18241270828717743,
+    "MAE": 0.07347071872145478,
+    "R2": 0.8207935513654605
+   },
+   {
+    "Target": "gamma",
+    "RMSE": 11851.493126580046,
+    "MAE": 1026.1865173883516,
+    "R2": 0.17482284180763596
+   },
+   {
+    "Target": "momentum",
+    "RMSE": 92870198541417.11,
+    "MAE": 9554970678319.777,
+    "R2": 0.7196860488940979
+   },
+   {
+    "Target": "kinetic_energy",
+    "RMSE": 2.768795796691521e+22,
+    "MAE": 2.3413939735944139e+21,
+    "R2": 0.6648914313729748
+   },
+   {
+    "Target": "total_energy",
+    "RMSE": 2.788102033481441e+22,
+    "MAE": 2.9698487653183746e+21,
+    "R2": 0.7386314756576708
+   },
+   {
+    "Target": "proper_time",
+    "RMSE": 2782.8226491839364,
+    "MAE": 807.8788337550143,
+    "R2": 0.9233449188664724
+   }
+  ],
+  "extreme": [
+   {
+    "Target": "position",
+    "RMSE": 1288917265482.8179,
+    "MAE": 283169749641.8529,
+    "R2": 0.8531542426399895
+   },
+   {
+    "Target": "velocity",
+    "RMSE": 52030836.84938944,
+    "MAE": 20625067.23199903,
+    "R2": 0.8296448074293371
+   },
+   {
+    "Target": "beta",
+    "RMSE": 0.17319332940111207,
+    "MAE": 0.0689127631747338,
+    "R2": 0.8303563993900287
+   },
+   {
+    "Target": "gamma",
+    "RMSE": 16583.996321757077,
+    "MAE": 1136.400837584436,
+    "R2": 0.14393407785792034
+   },
+   {
+    "Target": "momentum",
+    "RMSE": 76787044669929.55,
+    "MAE": 9343680307524.447,
+    "R2": 0.8048464219491374
+   },
+   {
+    "Target": "kinetic_energy",
+    "RMSE": 2.2655380261202173e+22,
+    "MAE": 2.258313217546872e+21,
+    "R2": 0.7641680351799818
+   },
+   {
+    "Target": "total_energy",
+    "RMSE": 2.256252250465036e+22,
+    "MAE": 2.907639814866162e+21,
+    "R2": 0.8264288176709067
+   },
+   {
+    "Target": "proper_time",
+    "RMSE": 2455.6957193001736,
+    "MAE": 748.3042928126847,
+    "R2": 0.9350630232562959
+   }
+  ]
+ },
+ "polynomial_nn": {
+  "normal": [
+   {
+    "Target": "position",
+    "RMSE": 2660753546609.52,
+    "MAE": 1083597751777.6211,
+    "R2": 0.37977712400919605
+   },
+   {
+    "Target": "velocity",
+    "RMSE": 100511197.70579048,
+    "MAE": 59580398.33865887,
+    "R2": 0.39461599650743573
+   },
+   {
+    "Target": "beta",
+    "RMSE": 0.3362502303878372,
+    "MAE": 0.2048192696908999,
+    "R2": 0.39106823197522644
+   },
+   {
+    "Target": "gamma",
+    "RMSE": 13316.119302395216,
+    "MAE": 3174.707468217392,
+    "R2": -0.041732982535965135
+   },
+   {
+    "Target": "momentum",
+    "RMSE": 138531005471145.89,
+    "MAE": 33867524791373.957,
+    "R2": 0.3762853604810765
+   },
+   {
+    "Target": "kinetic_energy",
+    "RMSE": 4.195852894207788e+22,
+    "MAE": 9.784376468558819e+21,
+    "R2": 0.23043698791423073
+   },
+   {
+    "Target": "total_energy",
+    "RMSE": 4.1951566607972695e+22,
+    "MAE": 1.0958602138667222e+22,
+    "R2": 0.40825809376641575
+   },
+   {
+    "Target": "proper_time",
+    "RMSE": 6481.063854688246,
+    "MAE": 2905.936489865849,
+    "R2": 0.5842210581972831
+   }
+  ],
+  "extreme": [
+   {
+    "Target": "position",
+    "RMSE": 2734846774770.7666,
+    "MAE": 1073491955332.2632,
+    "R2": 0.33888453066946733
+   },
+   {
+    "Target": "velocity",
+    "RMSE": 96115901.84882309,
+    "MAE": 57514580.02715527,
+    "R2": 0.4186679806676554
+   },
+   {
+    "Target": "beta",
+    "RMSE": 0.32219255064304014,
+    "MAE": 0.19862249922003752,
+    "R2": 0.4129080176069162
+   },
+   {
+    "Target": "gamma",
+    "RMSE": 18046.611683735624,
+    "MAE": 3318.9723208204755,
+    "R2": -0.013725032179752183
+   },
+   {
+    "Target": "momentum",
+    "RMSE": 130216884520399.95,
+    "MAE": 34636393768031.34,
+    "R2": 0.4387773202093693
+   },
+   {
+    "Target": "kinetic_energy",
+    "RMSE": 3.953063447460886e+22,
+    "MAE": 1.0019079416376138e+22,
+    "R2": 0.2819949032713619
+   },
+   {
+    "Target": "total_energy",
+    "RMSE": 3.917078047004179e+22,
+    "MAE": 1.1310573738386793e+22,
+    "R2": 0.476849353119284
+   },
+   {
+    "Target": "proper_time",
+    "RMSE": 6285.576412670398,
+    "MAE": 2867.1561193899684,
+    "R2": 0.5745650353063543
+   }
+  ]
+ }
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Overview & Timeline</title>
+<meta name="description" content="Project overview and the full chronological experiment timeline, iteration by iteration.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main>
+  <section class="section-tight">
+    <div class="wrap">
+      <p class="breadcrumbs"><a href="index.html">Home</a> / Overview</p>
+      <span class="eyebrow">Project overview</span>
+      <h1>Two iterations, one guiding question</h1>
+      <p class="lede">Can standard ML regressors and small neural networks recover exact relativistic dynamics from a synthetic simulator — and what happens when they're asked to extrapolate beyond the range they were trained on? This project answered that question twice: once with a narrow training distribution that failed under extrapolation, and once with a widened distribution that closed the gap.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">My physics engine</span>
+        <h2>Built on a custom relativistic simulator</h2>
+        <p>Every ground-truth number in every dataset in this project — position, velocity, β, γ, momentum, kinetic energy, total energy, proper time — comes from <code>relativistic-simulator</code>, a package I designed and published myself as the exact physics core of this pipeline.</p>
+      </div>
+      <div class="link-icons">
+        <a class="link-pill" href="https://github.com/Mayank170906/relativistic-simulator" target="_blank" rel="noopener">⭐ GitHub repository</a>
+        <a class="link-pill" href="https://pypi.org/project/relativistic-simulator/" target="_blank" rel="noopener">📦 PyPI package</a>
+        <a class="link-pill" href="https://mayank170906.github.io/relativistic-simulator/" target="_blank" rel="noopener">📖 Documentation</a>
+        <a class="link-pill" href="physics-engine.html">Full engine showcase →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">Timeline</span>
+        <h2>Experiment-by-experiment record</h2>
+        <p>Click any entry to expand its objective, configuration, result and the observation that motivated the next step.</p>
+      </div>
+      <div id="timeline" class="timeline"></div>
+      <div id="timelineDetail" class="timeline-detail"></div>
+    </div>
+  </section>
+</main>
+
+<footer id="site-footer" class="site-footer"></footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+(function(){
+  var experiments = SITE_DATA.EXPERIMENT_TIMELINE.experiments;
+  var list = document.getElementById("timeline");
+  var detail = document.getElementById("timelineDetail");
+
+  function eraLabel(era){ return era === "era1" ? "Iteration 1" : "Iteration 2"; }
+
+  function render(exp){
+    detail.innerHTML =
+      '<div class="card">' +
+      '<span class="badge badge-brand">' + eraLabel(exp.era) + '</span> ' +
+      '<h3 style="margin-top:.6rem">' + exp.title + '</h3>' +
+      '<p class="mono" style="font-size:.8rem;color:var(--text-faint)">' + exp.notebook + '</p>' +
+      '<div class="two-col">' +
+        '<div>' +
+          '<p><strong>Objective</strong><br>' + exp.objective + '</p>' +
+          '<p><strong>Dataset</strong><br>' + exp.dataset + '</p>' +
+          '<p><strong>Model</strong><br>' + exp.model + '</p>' +
+          '<p><strong>Configuration</strong><br>' + exp.config + '</p>' +
+        '</div>' +
+        '<div>' +
+          '<p><strong>Result</strong><br>' + exp.result + '</p>' +
+          '<p><strong>Observation</strong><br>' + exp.observation + '</p>' +
+          '<p><strong>Led to</strong><br>' + exp.next + '</p>' +
+        '</div>' +
+      '</div></div>';
+  }
+
+  experiments.forEach(function(exp, i){
+    var item = document.createElement("div");
+    item.className = "timeline-item" + (i === 0 ? " active" : "");
+    item.innerHTML = '<div class="t-title">' + exp.order + '. ' + exp.title + '</div><div class="t-meta">' + eraLabel(exp.era) + ' — ' + exp.notebook.split(",")[0] + '</div>';
+    item.addEventListener("click", function(){
+      document.querySelectorAll(".timeline-item").forEach(function(el){ el.classList.remove("active"); });
+      item.classList.add("active");
+      render(exp);
+    });
+    list.appendChild(item);
+  });
+
+  render(experiments[0]);
+})();
+</script>
+</body>
+</html>
