@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Results</title>
-<meta name="description" content="Interactive model comparison across all targets and metrics on the normal held-out test set.">
+<meta name="description" content="Model comparison, per-target analysis, and normal-vs-extreme generalization results across all 9 trained models.">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -15,21 +15,21 @@
     <div class="wrap">
       <p class="breadcrumbs"><a href="index.html">Home</a> / Results</p>
       <span class="eyebrow">Results</span>
-      <h1>Model comparison — normal held-out test</h1>
-      <p class="lede">All 9 models trained on <code>physics_data.npy</code> (Iteration 2), evaluated on the same 100,000-row held-out normal test split. Select a target and metric to compare every model, or view the full table.</p>
-      <div class="plain-note">
-        <span class="plain-tag">In plain words</span><br>
-        This is the report card. <span class="kw" title="A score from ~0 to 1 (can go negative). 1 = perfect predictions, 0 = no better than guessing the average, negative = worse than that.">R²</span> close to 1 is great; near 0 means the model isn't really learning the pattern. Pick any physical quantity and metric below to see exactly who did best at predicting it.
-      </div>
-      <div class="mini-qa">
-        <div class="mq"><div class="mq-q">Why show R², RMSE and MAE instead of just one number?</div><div class="mq-a">R² tells you "how much better than guessing," while RMSE/MAE tell you the actual size of the error in real units (metres, joules, etc.) — together they give a fuller picture than either alone.</div></div>
-        <div class="mq"><div class="mq-q">Is the "best" model always the best choice?</div><div class="mq-a">Not necessarily — the best overall model isn't always the best for every individual target. Check the <a href="targets.html">Target Analysis</a> page for the per-quantity winner.</div></div>
+      <h1>Results: model comparison, target analysis &amp; generalization</h1>
+      <p class="lede">All 9 models were trained on <code>physics_data.npy</code> (Iteration 2) and evaluated on the same 100,000-row held-out normal test split, plus an independently generated extreme test set. This page covers three views of that evaluation: an overall model comparison, a per-target breakdown, and normal-vs-extreme generalization.</p>
+      <div class="section-nav">
+        <a href="#comparison">Model comparison</a><a href="#targets">Per-target analysis</a><a href="#generalization">Generalization: normal vs. extreme</a>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" id="comparison">
     <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">Model comparison</span>
+        <h2>Every model, scored per target and per metric</h2>
+        <p>Select a target and metric to compare all 9 models on the normal held-out test set, or browse the full result table below.</p>
+      </div>
       <div class="controls">
         <div class="control">
           <label for="targetSelect">Target</label>
@@ -93,14 +93,81 @@
       <div class="chart-card">
         <div class="chart-box"><canvas id="overallRankChart"></canvas></div>
       </div>
-      <p class="chart-legend-note">The plain neural network (mean R² 0.715 normal / 0.748 extreme) and polynomial-feature neural network (0.340 normal) were trained and evaluated separately from this sweep — see <a href="models.html">Models</a> and <a href="ood.html">OOD</a>.</p>
+      <p class="chart-legend-note">The plain neural network (mean R² 0.715 normal / 0.748 extreme) and polynomial-feature neural network (0.340 normal) were trained and evaluated separately from this sweep — see <a href="models.html">Models</a> and the <a href="#generalization">Generalization section</a> below.</p>
+    </div>
+  </section>
+
+  <section class="section" id="targets">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">Per-target analysis</span>
+        <h2>Eight targets, eight learning problems</h2>
+        <p>Position, velocity, β, γ, momentum, kinetic energy, total energy and proper time all come from the same simulator call, but differ substantially in how learnable they are. Select a target for its full profile: definition, distribution, model ranking, and open questions.</p>
+      </div>
+      <div class="tag-row" id="targetPicker" style="margin-bottom:1.6rem"></div>
+      <div id="targetDetail"></div>
+    </div>
+  </section>
+
+  <section class="section" id="generalization">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">Generalization</span>
+        <h2>Normal vs. extreme: two different outcomes</h2>
+        <p>"Extreme" carries a different meaning in each dataset iteration. In Iteration 1, the extreme set is genuinely out-of-range (β up to 0.999999 vs. training capped at 0.8), and models failed badly. In Iteration 2, training itself already spans that range, so the extreme set functions as an independently-drawn resample rather than a true out-of-distribution test — and the neural network shows no meaningful degradation.</p>
+      </div>
+      <div class="section-nav"><a href="#gen-era2">Iteration 2 — MLP, normal vs. extreme</a><a href="#gen-era1">Iteration 1 — extrapolation failure</a></div>
+
+      <h3 id="gen-era2">Iteration 2 — plain MLP, normal vs. extreme</h3>
+      <div class="controls">
+        <div class="control">
+          <label for="modelToggle">Model</label>
+          <div class="segmented" id="modelToggle">
+            <button data-model="neural_network" class="active">Plain MLP</button>
+            <button data-model="polynomial_nn">Polynomial-feature MLP</button>
+          </div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-box"><canvas id="oodChart"></canvas></div>
+        <p class="chart-legend-note">R² per target, normal held-out test (100,000 rows from physics_data.npy) vs. the independently-generated 10,000-row extreme set.</p>
+      </div>
+
+      <div class="table-wrap" style="margin-top:1rem">
+        <table>
+          <thead><tr><th>Target</th><th>Normal R²</th><th>Extreme R²</th><th>Difference</th></tr></thead>
+          <tbody id="oodTableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="callout good" style="margin-top:1rem">
+        <strong>Evidence-based reading:</strong> the plain MLP's mean R² is 0.715 on the normal test and 0.748 on the extreme test — <em>higher</em>, not lower. This is consistent with the extreme set no longer being out-of-distribution for Iteration-2 training, not evidence that the model generalizes better on harder data.
+      </div>
+
+      <hr class="sep">
+
+      <h3 id="gen-era1">Iteration 1 — genuine extrapolation failure</h3>
+      <p>Nine scikit-learn models were trained only on β ≤ 0.8 (<code>relativistic_dataset_1m.npy</code>) and evaluated on the same 10,000-row extreme set (β up to 0.999999). In this iteration, the beta range genuinely was never seen in training.</p>
+      <div class="controls">
+        <div class="control">
+          <label for="oldTargetSelect">Target</label>
+          <select id="oldTargetSelect"></select>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-box"><canvas id="oldEraChart"></canvas></div>
+        <p class="chart-legend-note" id="oldEraNote"></p>
+      </div>
+      <div class="callout warn" style="margin-top:1rem">
+        The project's own evaluation notebook noted this directly: <em>"excellent interpolation but poor extrapolation."</em> Polynomial regression (degree 3/4) reached R² as low as −1.7×10⁹ on some targets; even gradient boosting and hist gradient boosting went negative on position, gamma, momentum, and both energy targets. Velocity and beta degraded far more gracefully (R² ≈ 0.45–0.50 for most models) since they stay bounded even at extreme β. See <a href="research.html#conclusions">Research → Conclusions</a> for the full analysis.
+      </div>
     </div>
   </section>
 </main>
 
 <div class="page-prevnext wrap">
   <a href="models.html"><span class="lbl">Previous</span>Models</a>
-  <a class="next" href="ood.html"><span class="lbl">Next</span>Normal vs Extreme</a>
+  <a class="next" href="research.html#conclusions"><span class="lbl">Next</span>Conclusions</a>
 </div>
 
 <footer id="site-footer" class="site-footer"></footer>
@@ -110,5 +177,163 @@
 <script src="js/charts.js"></script>
 <script src="js/app.js"></script>
 <script src="js/results.js"></script>
+<script>
+(function(){
+  var meta = SITE_DATA.TARGET_META.targets;
+  var sklearn = SITE_DATA.MODEL_RESULTS.sklearn_normal;
+  var nn = SITE_DATA.MODEL_RESULTS.neural_network;
+  var stats = SITE_DATA.DATASET_STATS.distribution_summary;
+
+  var analysis = {
+    position: "Position aggregates every upstream error (mass, force, time, and the momentum/energy relationship all propagate into it), yet tree ensembles still recover it well (R² up to 0.99 with Hist Gradient Boosting) because the underlying relationship, while algebraically involved, is smooth and monotonic in each input over most of the range.",
+    velocity: "Velocity and beta are mathematically the same quantity (β=v/c) and their metrics track each other exactly in the sklearn sweep. Both are naturally bounded in [-c, c], which appears to make them easier to fit than unbounded quantities like momentum or energy.",
+    beta: "Identical R² to velocity in every sklearn result (they differ only by the constant c), confirming the models are learning the same functional shape for both.",
+    gamma: "The hardest target to fit consistently: R² ranges from 0.01 (Linear Regression) to 0.98 (Hist Gradient Boosting) — the widest spread of any target. Gamma is a highly nonlinear, unbounded function of beta that diverges as β→1, which likely explains why only the strongest non-linear models capture it.",
+    momentum: "Momentum is linear in time and force by construction (p=p₀+Ft), which should make it easy — yet it's one of the two targets (with kinetic energy) where even the best sklearn model tops out under 0.81 R². Its huge dynamic range (spanning many orders of magnitude across the log-uniform mass/force sampling) likely dominates the loss unevenly.",
+    kinetic_energy: "The single hardest target by best-achievable R² (0.781, Decision Tree) across the sklearn sweep. Kinetic energy depends on momentum squared, compounding the same dynamic-range issue seen in momentum.",
+    total_energy: "Slightly easier than kinetic energy since it's dominated by the (very large, slowly varying) rest-mass term mc² for most of the training distribution's beta range, giving models an easier baseline to anchor to.",
+    proper_time: "The strongest target overall (R² up to 0.993, Hist Gradient Boosting). Proper time is a smooth, bounded-rate integral of 1/γ over time, and unlike gamma it never diverges — it only asymptotes toward a finite ratio to coordinate time."
+  };
+
+  var openQuestions = {
+    position: "Would explicitly encoding the (K−K₀)/F cancellation-free identity as a feature help simpler models close the gap to tree ensembles?",
+    velocity: "Since velocity/beta are redundant targets here, would training on beta alone and deriving velocity in postprocessing reduce model capacity needed elsewhere?",
+    beta: "Same as velocity — is joint multi-output training wasting capacity on a redundant pair of targets?",
+    gamma: "Would a log-gamma or rapidity-space target transform (matching the engine's own log1p-based internals) make this target as learnable as proper_time?",
+    momentum: "Would training on log-magnitude + sign of momentum (rather than raw momentum) reduce the dynamic-range problem visible here?",
+    kinetic_energy: "Is the ~0.78 ceiling a genuine information limit given the 5 inputs, or an artifact of un-normalized, heavy-tailed target scaling?",
+    total_energy: "How much of this target's apparent accuracy is just from matching the dominant mc² term rather than the kinetic contribution?",
+    proper_time: "Given how learnable this target already is, would it transfer well as an auxiliary/pretraining signal for the harder targets?"
+  };
+
+  var picker = document.getElementById("targetPicker");
+  meta.forEach(function(t){
+    var btn = document.createElement("button");
+    btn.className = "seg-btn"; btn.style.cursor="pointer"; btn.textContent = t.label;
+    btn.setAttribute("data-id", t.id);
+    btn.addEventListener("click", function(){ render(t.id); highlight(t.id); });
+    picker.appendChild(btn);
+  });
+  function highlight(id){
+    picker.querySelectorAll("button").forEach(function(b){
+      b.style.borderColor = b.getAttribute("data-id")===id ? "var(--brand)" : "var(--border)";
+      b.style.color = b.getAttribute("data-id")===id ? "var(--brand)" : "var(--text)";
+    });
+  }
+
+  var targetChart;
+  function render(id){
+    var t = meta.find(function(x){ return x.id === id; });
+    var rows = sklearn.filter(function(r){ return r.target === id; }).slice().sort(function(a,b){return b.R2-a.R2;});
+    var nnNormal = nn.normal.find(function(r){ return r.Target===id; });
+    var nnExtreme = nn.extreme.find(function(r){ return r.Target===id; });
+    var distRow = stats.find(function(r){ return r.feature === id; });
+
+    document.getElementById("targetDetail").innerHTML =
+      '<div class="grid grid-2">' +
+        '<div class="card">' +
+          '<h2 style="margin-bottom:.1rem">' + t.label + ' <span class="sym">' + t.symbol + '</span></h2>' +
+          '<p class="badge badge-neutral">' + t.unit + '</p>' +
+          '<p><strong>Definition</strong><br>' + t.definition + '</p>' +
+          '<div class="eq">' + t.equation + '</div>' +
+          (t.note ? '<p style="font-size:.85rem">' + t.note + '</p>' : '') +
+        '</div>' +
+        '<div class="card">' +
+          '<h3>Dataset distribution (Iteration 2)</h3>' +
+          (distRow ? (
+            '<p>Train median: <span class="mono">' + distRow.train_median.toExponential(4) + '</span></p>' +
+            '<p>Extreme-test median: <span class="mono">' + distRow.test_median.toExponential(4) + '</span></p>' +
+            '<figure class="image-figure" style="margin-top:.6rem"><img src="assets/images/' + id + '_train_vs_extreme_test.png" alt="' + id + ' distribution"></figure>'
+          ) : '<p>No distribution row available for this feature.</p>') +
+        '</div>' +
+      '</div>' +
+      '<div class="grid grid-2" style="margin-top:1.1rem">' +
+        '<div class="chart-card">' +
+          '<h3>Scikit-learn model comparison (R², normal test)</h3>' +
+          '<div class="chart-box short"><canvas id="targetChart"></canvas></div>' +
+        '</div>' +
+        '<div class="card">' +
+          '<h3>Neural network — normal vs extreme</h3>' +
+          '<div class="grid grid-2">' +
+            '<div class="metric-card"><div class="metric-num">' + (nnNormal?nnNormal.R2.toFixed(4):"—") + '</div><div class="metric-lbl">Normal R²</div></div>' +
+            '<div class="metric-card"><div class="metric-num">' + (nnExtreme?nnExtreme.R2.toFixed(4):"—") + '</div><div class="metric-lbl">Extreme R²</div></div>' +
+          '</div>' +
+          '<p style="margin-top:.6rem"><strong>Best sklearn model:</strong> ' + (rows[0]?rows[0].model + " (R²=" + rows[0].R2.toFixed(4) + ")":"—") + '</p>' +
+          '<p><strong>Weakest sklearn model:</strong> ' + (rows[rows.length-1]?rows[rows.length-1].model + " (R²=" + rows[rows.length-1].R2.toFixed(4) + ")":"—") + '</p>' +
+        '</div>' +
+      '</div>' +
+      '<div class="callout" style="margin-top:1.1rem"><strong>Analysis</strong><br>' + analysis[id] + '</div>' +
+      '<div class="callout warn" style="margin-top:.7rem"><strong>Open question</strong><br>' + openQuestions[id] + '</div>';
+
+    targetChart && targetChart.destroy();
+    targetChart = ChartHelpers.barChart(document.getElementById("targetChart"),
+      rows.map(function(r){return r.model;}),
+      [{ label:"R²", data: rows.map(function(r){return r.R2;}), backgroundColor: rows.map(function(r,i){ return i===0 ? "#16a34a" : (i===rows.length-1?"#e0393e":"#4f5bff"); }) }],
+      { indexAxis:"y", plugins:{legend:{display:false}} }
+    );
+  }
+
+  render("gamma"); highlight("gamma");
+})();
+</script>
+<script>
+(function(){
+  var mr = SITE_DATA.MODEL_RESULTS;
+  var targetIds = SITE_DATA.TARGET_META.targets.map(function(t){ return t.id; });
+  var currentModel = "neural_network";
+  var oodChart;
+
+  function renderOOD(){
+    var normal = mr[currentModel].normal, extreme = mr[currentModel].extreme;
+    var labels = normal.map(function(r){ return r.Target.replace(/_/g," "); });
+    oodChart && oodChart.destroy();
+    oodChart = ChartHelpers.barChart(document.getElementById("oodChart"), labels, [
+      { label: "Normal R²", data: normal.map(function(r){return r.R2;}), backgroundColor: "#4f5bff" },
+      { label: "Extreme R²", data: extreme.map(function(r){return r.R2;}), backgroundColor: "#ff6a3d" }
+    ]);
+    var tbody = document.getElementById("oodTableBody");
+    tbody.innerHTML = normal.map(function(r,i){
+      var diff = extreme[i].R2 - r.R2;
+      var cls = diff >= 0 ? "best" : "worst";
+      return "<tr><td>"+r.Target.replace(/_/g," ")+"</td><td class='num'>"+r.R2.toFixed(4)+"</td><td class='num'>"+extreme[i].R2.toFixed(4)+"</td><td class='num "+cls+"'>"+(diff>=0?"+":"")+diff.toFixed(4)+"</td></tr>";
+    }).join("");
+  }
+  document.querySelectorAll("#modelToggle button").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      document.querySelectorAll("#modelToggle button").forEach(function(b){b.classList.remove("active");});
+      btn.classList.add("active");
+      currentModel = btn.getAttribute("data-model");
+      renderOOD();
+    });
+  });
+  renderOOD();
+
+  // Iteration-1 chart
+  var oldData = SITE_DATA.OLD_ERA_RESULTS.extreme_test;
+  var oldSel = document.getElementById("oldTargetSelect");
+  targetIds.forEach(function(t){
+    var o = document.createElement("option"); o.value=t; o.textContent=t.replace(/_/g," "); oldSel.appendChild(o);
+  });
+  var oldChart;
+  function renderOldEra(){
+    var target = oldSel.value;
+    var rows = oldData.filter(function(r){ return r.target === target; })
+      .map(function(r){ return { model: r.model.replace(".joblib",""), r2: r.r2 }; })
+      .sort(function(a,b){ return b.r2 - a.r2; });
+    oldChart && oldChart.destroy();
+    oldChart = ChartHelpers.barChart(document.getElementById("oldEraChart"),
+      rows.map(function(r){return r.model;}),
+      [{ label: "R² on extreme test (Iteration 1 models)", data: rows.map(function(r){return r.r2;}),
+         backgroundColor: rows.map(function(r){ return r.r2 < 0 ? "#e0393e" : "#16a34a"; }) }],
+      { indexAxis: "y" }
+    );
+    document.getElementById("oldEraNote").textContent =
+      "Target: " + target.replace(/_/g," ") + " — bars in red indicate negative R² (predictions worse than predicting the mean). This is genuine extrapolation failure: these models never saw β > 0.8 in training.";
+  }
+  oldSel.addEventListener("change", renderOldEra);
+  oldSel.value = "position";
+  renderOldEra();
+})();
+</script>
 </body>
 </html>

@@ -6,15 +6,10 @@
     { href: "index.html", label: "Home" },
     { href: "research.html", label: "Research" },
     { href: "notebooks.html", label: "Notebooks" },
-    { href: "overview.html", label: "Overview" },
     { href: "physics.html", label: "Physics" },
-    { href: "physics-engine.html", label: "Engine" },
     { href: "datasets.html", label: "Datasets" },
     { href: "models.html", label: "Models" },
-    { href: "results.html", label: "Results" },
-    { href: "ood.html", label: "OOD" },
-    { href: "targets.html", label: "Targets" },
-    { href: "conclusions.html", label: "Conclusions" }
+    { href: "results.html", label: "Results" }
   ];
 
   function currentPage() {
@@ -50,14 +45,39 @@
   function buildFooter() {
     var host = document.getElementById("site-footer");
     if (!host) return;
+    var year = new Date().getFullYear();
     host.innerHTML =
       '<div class="wrap">' +
-      "<div>Relativistic Physics × Machine Learning — a research report built entirely from this project's own notebooks, datasets and models. No numbers on this site are fabricated.</div>" +
-      '<div class="footer-links">' +
-      '<a href="https://github.com/Mayank170906/relativistic-simulator" target="_blank" rel="noopener">Physics engine on GitHub</a>' +
-      '<a href="https://pypi.org/project/relativistic-simulator/" target="_blank" rel="noopener">PyPI package</a>' +
-      '<a href="https://mayank170906.github.io/relativistic-simulator/" target="_blank" rel="noopener">Engine documentation</a>' +
-      "</div></div>";
+        '<div class="footer-grid">' +
+          '<div class="footer-col">' +
+            '<div class="footer-brand"><span class="dot" aria-hidden="true"></span>Relativistic ML Report</div>' +
+            '<p>A research report on learning special-relativistic dynamics from a self-built physics simulator, covering dataset generation, model training, and evaluation under distribution shift.</p>' +
+          '</div>' +
+          '<div class="footer-col"><h4>Report</h4><ul>' +
+            '<li><a href="research.html">Research</a></li>' +
+            '<li><a href="notebooks.html">Notebooks</a></li>' +
+            '<li><a href="physics.html">Physics</a></li>' +
+            '<li><a href="datasets.html">Datasets</a></li>' +
+            '<li><a href="models.html">Models</a></li>' +
+            '<li><a href="results.html">Results</a></li>' +
+          '</ul></div>' +
+          '<div class="footer-col"><h4>Physics engine</h4><ul>' +
+            '<li><a href="https://github.com/Mayank170906/relativistic-simulator" target="_blank" rel="noopener">GitHub repository</a></li>' +
+            '<li><a href="https://pypi.org/project/relativistic-simulator/" target="_blank" rel="noopener">PyPI package</a></li>' +
+            '<li><a href="https://mayank170906.github.io/relativistic-simulator/" target="_blank" rel="noopener">Documentation</a></li>' +
+          '</ul></div>' +
+          '<div class="footer-col"><h4>Project</h4><ul>' +
+            '<li><a href="license.html">License</a></li>' +
+            '<li><a href="terms.html">Terms of Use</a></li>' +
+          '</ul>' +
+          '<p style="margin-top:.9rem">Released under the MIT License. You are free to use, modify and build on this work, including commercially, provided the original author is credited.</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="footer-bottom">' +
+          '<span>&copy; ' + year + ' Mayank. Released under the <a href="license.html">MIT License</a>.</span>' +
+          '<span class="license-note">Open to collaboration — see <a href="terms.html#contributions">contributing</a> or reach out via <a href="https://github.com/Mayank170906/relativistic-simulator" target="_blank" rel="noopener">GitHub</a>.</span>' +
+        '</div>' +
+      '</div>';
   }
 
   function initTheme() {

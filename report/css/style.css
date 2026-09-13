@@ -313,9 +313,33 @@ pre.code code{ background:none; padding:0; }
 .timeline-detail{ margin-top: 1rem; }
 
 /* ---------- footer ---------- */
-.site-footer{ border-top:1px solid var(--border); margin-top: 4rem; padding: 2.2rem 0; color: var(--text-faint); font-size:.85rem; }
+.site-footer{ border-top:1px solid var(--border); margin-top: 4rem; padding: 2.6rem 0 2rem; color: var(--text-faint); font-size:.85rem; }
 .site-footer a{ color: var(--text-dim); }
 .footer-links{ display:flex; gap:1rem; flex-wrap:wrap; margin-top:.6rem; }
+
+.footer-grid{ display:grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 2rem; }
+@media (max-width: 860px){ .footer-grid{ grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px){ .footer-grid{ grid-template-columns: 1fr; } }
+.footer-col h4{ font-size:.72rem; text-transform:uppercase; letter-spacing:.07em; color: var(--text-faint); margin: 0 0 .8rem; font-weight:800; }
+.footer-col ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.5rem; }
+.footer-col a{ color: var(--text-dim); font-size:.85rem; }
+.footer-col a:hover{ color: var(--brand); }
+.footer-col p{ color: var(--text-faint); font-size:.82rem; margin: 0 0 .8rem; }
+.footer-bottom{
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.6rem;
+  margin-top: 2.2rem; padding-top: 1.4rem; border-top: 1px solid var(--border); font-size:.8rem;
+}
+.footer-bottom .license-note{ display:inline-flex; align-items:center; gap:.4rem; }
+.footer-brand{ display:flex; align-items:center; gap:.5rem; font-weight:800; color: var(--text); margin-bottom:.7rem; }
+.footer-brand .dot{ width:9px;height:9px;border-radius:50%; background: conic-gradient(from 180deg, var(--brand), var(--brand-2), var(--brand-3), var(--brand)); flex:none; }
+
+/* ---------- legal pages ---------- */
+.legal-doc{ max-width: 760px; }
+.legal-doc h2{ margin-top: 2.2rem; }
+.legal-doc h2:first-of-type{ margin-top: 1rem; }
+.legal-doc p, .legal-doc li{ color: var(--text-dim); font-size: .95rem; }
+.legal-doc ul{ padding-left: 1.2rem; }
+.legal-updated{ font-size:.8rem; color: var(--text-faint); }
 
 /* ---------- misc ---------- */
 .kicker{ font-size:.78rem; font-weight:700; color: var(--brand); text-transform:uppercase; letter-spacing:.08em; }
@@ -446,8 +470,8 @@ input[type=range]{ flex:1; accent-color: var(--brand); }
 .glossary-card .g-term{ font-weight:800; font-size:1rem; }
 .glossary-card .g-sym{ font-family: var(--font-mono); color: var(--brand); font-size:1.05rem; }
 .glossary-card .g-plain{ font-size:.88rem; margin-top:.5rem; color: var(--text); }
-.glossary-card .g-plain::before{ content:"In plain words: "; font-weight:700; color: var(--brand-2); }
-.glossary-card .g-formal{ font-size:.82rem; margin-top:.55rem; color: var(--text-faint); border-top:1px dashed var(--border); padding-top:.5rem; }
+.glossary-card .g-formal{ font-size:.82rem; margin-top:.55rem; color: var(--text-faint); border-top:1px solid var(--border); padding-top:.5rem; }
+.glossary-card .g-formal::before{ content:"Notation — "; font-weight:700; color: var(--text-faint); }
 .glossary-card[hidden]{ display:none; }
 
 /* Q&A accordion ("why did I do this") */

@@ -17,9 +17,9 @@
       <h1>Learning Computational Relativistic Dynamics from Synthetic Physical Simulation</h1>
       <p class="lede">A custom special-relativity simulator generates exact ground truth for eight physical quantities under constant 1D force. This report documents every dataset, model family, and evaluation this project actually ran — including where the models succeeded and where they failed.</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="research.html">📖 New here? Read the plain-English guide →</a>
+        <a class="btn btn-primary" href="research.html">Read the Research Report →</a>
         <a class="btn btn-ghost" href="results.html">Explore Results</a>
-        <a class="btn btn-ghost" href="physics-engine.html">Physics Engine</a>
+        <a class="btn btn-ghost" href="physics.html">Physics Engine</a>
       </div>
 
       <div class="stat-strip">
@@ -31,9 +31,9 @@
       </div>
 
       <div class="scratch-banner">
-        <span class="plain-tag">Built from scratch</span>
-        <h3>The physics engine is mine — designed, built and published to PyPI myself</h3>
-        <p style="margin:0">Every ground-truth number in this project comes from <code>relativistic-simulator</code>, a special-relativity physics engine I wrote and released as an independent open-source package — not a wrapper around an existing library. Everything else in this project is plain NumPy, PyTorch and scikit-learn, written from first principles: no pretrained models, no AutoML.</p>
+        <span class="plain-tag">Attribution</span>
+        <h3>The physics engine was independently designed and published to PyPI</h3>
+        <p style="margin:0">Every ground-truth value in this project comes from <code>relativistic-simulator</code>, a special-relativity physics engine designed and released as an independent open-source package — not a wrapper around an existing library. Every model is implemented directly with NumPy, PyTorch, and scikit-learn: no pretrained components, no AutoML.</p>
         <div class="link-icons" style="margin-top:1rem">
           <a class="link-pill" href="https://github.com/Mayank170906/relativistic-simulator" target="_blank" rel="noopener">⭐ GitHub</a>
           <a class="link-pill" href="https://pypi.org/project/relativistic-simulator/" target="_blank" rel="noopener">📦 PyPI</a>
@@ -67,27 +67,27 @@
           <div class="metric-lbl">Best model, normal test</div>
           <div class="metric-sub">Mean R² = 0.894 across all 8 targets (scikit-learn sweep on physics_data.npy).</div>
         </a>
-        <a class="card card-link metric-card" href="targets.html">
+        <a class="card card-link metric-card" href="results.html#targets">
           <div class="metric-num">Proper Time</div>
           <div class="metric-lbl">Strongest target</div>
           <div class="metric-sub">R² = 0.993 with Hist Gradient Boosting — the most learnable output.</div>
         </a>
-        <a class="card card-link metric-card" href="targets.html">
+        <a class="card card-link metric-card" href="results.html#targets">
           <div class="metric-num">Kinetic Energy</div>
           <div class="metric-lbl">Hardest target</div>
           <div class="metric-sub">Best achievable R² across all model families is only 0.781.</div>
         </a>
-        <a class="card card-link metric-card" href="ood.html">
+        <a class="card card-link metric-card" href="results.html#generalization">
           <div class="metric-num">0.715 → 0.748</div>
           <div class="metric-lbl">MLP: normal → extreme mean R²</div>
-          <div class="metric-sub">No degradation on the current-era extreme set — see why on the OOD page.</div>
+          <div class="metric-sub">No degradation on the current-era extreme set — see why on the Results page.</div>
         </a>
-        <a class="card card-link metric-card" href="conclusions.html">
+        <a class="card card-link metric-card" href="research.html#conclusions">
           <div class="metric-num">R² as low as −1.7×10⁹</div>
           <div class="metric-lbl">Iteration-1 extrapolation failure</div>
           <div class="metric-sub">Models trained only on β ≤ 0.8 collapsed when tested up to β = 0.999999.</div>
         </a>
-        <a class="card card-link metric-card" href="physics-engine.html">
+        <a class="card card-link metric-card" href="physics.html#engine">
           <div class="metric-num">relativistic-simulator</div>
           <div class="metric-lbl">Custom physics engine</div>
           <div class="metric-sub">Published on PyPI, MIT-licensed, exact closed-form relativistic solver.</div>
@@ -118,7 +118,7 @@
           <div class="flow-node">Extreme evaluation<span class="sub">independently generated 10k set</span></div>
         </div>
       </div>
-      <p style="text-align:center"><a href="overview.html">See the full experiment timeline, including the earlier iteration that motivated this design →</a></p>
+      <p style="text-align:center"><a href="research.html#methodology">See the full experimental history, including the earlier iteration that motivated this design →</a></p>
     </div>
   </section>
 </main>

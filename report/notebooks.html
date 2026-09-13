@@ -16,12 +16,12 @@
       <p class="breadcrumbs"><a href="index.html">Home</a> / Notebooks</p>
       <span class="eyebrow">Read the actual code</span>
       <h1>Every notebook, exported and explained</h1>
-      <p class="lede">This whole project was built and run inside Jupyter notebooks — no hidden pipeline, no framework doing the work behind the scenes. Every notebook below was exported straight to HTML exactly as it ran (code, output, plots and all) and is linked here so you can open it and read it directly, in full, in your browser. This page is the hub: pick a notebook below and it opens in a new tab.</p>
+      <p class="lede">This project was developed and run entirely within Jupyter notebooks — there is no hidden pipeline or framework operating behind the scenes. Each notebook below was exported to HTML exactly as it ran, with code, output, and plots intact, and is linked here with a description of its role in the pipeline. Selecting a notebook opens its full export in a new tab.</p>
 
       <div class="scratch-banner">
-        <span class="plain-tag">Built from scratch</span>
-        <h3>The physics engine, the datasets, and every model here were built from the ground up</h3>
-        <p style="margin:0">The ground-truth physics simulator that every dataset in this project comes from — <code>relativistic-simulator</code> — is a package I designed, implemented, tested and published myself. Nothing in this project imports a pre-built relativity library, a pretrained model, or a high-level AutoML framework: every notebook below is plain NumPy, PyTorch and scikit-learn code written from first principles.</p>
+        <span class="plain-tag">Attribution</span>
+        <h3>The physics engine, datasets, and every model here were built from the ground up</h3>
+        <p style="margin:0">The ground-truth physics simulator underlying every dataset in this project — <code>relativistic-simulator</code> — was designed, implemented, tested, and published by the author as an independent package. No notebook in this project imports a pre-built relativity library, a pretrained model, or a high-level AutoML framework: each one is written directly against NumPy, PyTorch, and scikit-learn.</p>
         <div class="lib-row">
           <span class="lib-pill">numpy</span>
           <span class="lib-pill">pytorch</span>
@@ -52,15 +52,15 @@
         <span class="badge badge-warn">ITERATION 1 — EARLIER ATTEMPT</span>
         <h2>The first attempt (narrow β range) and its failure analysis</h2>
       </div>
-      <p>These five notebooks are the earlier iteration, trained only on everyday speeds (β ≤ 0.8). Reading them alongside Iteration 2 is the fastest way to see exactly what changed and why it mattered — see <a href="ood.html">Normal vs Extreme</a> and <a href="conclusions.html">Conclusions</a> for the results this produced.</p>
+      <p>These five notebooks are the earlier iteration, trained only on everyday speeds (β ≤ 0.8). Reading them alongside Iteration 2 is the most direct way to see what changed and why it mattered — see <a href="results.html#generalization">Results → Generalization</a> and <a href="research.html#conclusions">Research → Conclusions</a> for the results this produced.</p>
       <div class="grid grid-2" id="era1Grid"></div>
     </div>
   </section>
 </main>
 
 <div class="page-prevnext wrap">
-  <a href="research.html"><span class="lbl">Previous</span>The Research, Explained</a>
-  <a class="next" href="overview.html"><span class="lbl">Next</span>Overview &amp; Timeline</a>
+  <a href="research.html"><span class="lbl">Previous</span>Research Report</a>
+  <a class="next" href="physics.html"><span class="lbl">Next</span>Physics &amp; Engine</a>
 </div>
 
 <footer id="site-footer" class="site-footer"></footer>
@@ -70,7 +70,7 @@
 <script>
 (function(){
   var era2 = [
-    { file:"era2-data-generation.html", icon:"🗂️", title:"Data Generation", src:"data/data_gen.ipynb", desc:"Drives my own <code>relativistic_simulator.simulate()</code> in a per-row loop with a controlled β mixture (70% everyday speeds, 20% fast, 10% near-light-speed) to build the 1,000,000-row <code>physics_data.npy</code> dataset used by every model below, then runs the engine's own validation checks on it." },
+    { file:"era2-data-generation.html", icon:"🗂️", title:"Data Generation", src:"data/data_gen.ipynb", desc:"Drives <code>relativistic_simulator.simulate()</code> in a per-row loop with a controlled β mixture (70% everyday speeds, 20% fast, 10% near-light-speed) to build the 1,000,000-row <code>physics_data.npy</code> dataset used by every model below, then runs the engine's own validation checks on it." },
     { file:"era2-sklearn-models.html", icon:"🌲", title:"Scikit-learn Model Sweep", src:"notebooks/ml.ipynb", desc:"Trains and scores all 7 classic regressors (linear, polynomial, decision tree, random forest, extra trees, gradient boosting, hist gradient boosting) on the same train/test split, producing the per-target R²/RMSE/MAE table used on the Results page." },
     { file:"era2-neural-network.html", icon:"🧠", title:"Plain Neural Network", src:"notebooks/neuralnetwork.ipynb", desc:"Builds and trains the 8-layer PyTorch MLP (5→…→8) from scratch — model definition, training loop, AdamW optimizer, learning-rate scheduler — and evaluates it on both the normal and extreme test sets." },
     { file:"era2-polynomial-neural-network.html", icon:"➗", title:"Polynomial-Feature Neural Network", src:"notebooks/PolynomialNeuralNetwork.ipynb", desc:"The same network shape, but first expands the 5 inputs into 20 degree-2 polynomial features by hand before training, to test whether an explicit feature hint helps or hurts." }
@@ -80,7 +80,7 @@
     { file:"era1-polynomial-regression.html", icon:"📐", title:"Polynomial Regression", src:"notebooks-oldData/PolynomialRegression.ipynb", desc:"Degree 2–4 polynomial regression on the same narrow-range data — this is the notebook where degree 3/4 models later produced the extreme negative R² scores once tested on high-β data." },
     { file:"era1-decision-tree.html", icon:"🌳", title:"Decision Tree &amp; Ensembles", src:"notebooks-oldData/tree.ipynb", desc:"Decision tree, random forest, extra trees, gradient boosting and hist gradient boosting, all trained on the narrow β≤0.8 range for the Iteration-1 comparison." },
     { file:"era1-neural-network.html", icon:"🧠", title:"Neural Network (Iteration 1)", src:"notebooks-oldData/neuralnetwork.ipynb", desc:"The first neural network attempt, trained on the same narrow-range dataset, before the training distribution was widened in Iteration 2." },
-    { file:"era1-evaluation.html", icon:"🔍", title:"Extrapolation Evaluation", src:"notebooks-oldData/evaluation.ipynb", desc:"Loads every Iteration-1 model and scores it against the independently-generated extreme test set (β up to 0.999999) — this is the notebook that surfaced the \"excellent interpolation but poor extrapolation\" failure and directly produced the numbers shown on the Normal vs Extreme page." }
+    { file:"era1-evaluation.html", icon:"🔍", title:"Extrapolation Evaluation", src:"notebooks-oldData/evaluation.ipynb", desc:"Loads every Iteration-1 model and scores it against the independently-generated extreme test set (β up to 0.999999) — this is the notebook that surfaced the \"excellent interpolation but poor extrapolation\" failure and directly produced the numbers shown in Results → Generalization." }
   ];
 
   function card(nb){

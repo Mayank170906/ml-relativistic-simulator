@@ -16,15 +16,7 @@
       <p class="breadcrumbs"><a href="index.html">Home</a> / Datasets</p>
       <span class="eyebrow">Datasets</span>
       <h1>Two generations, one physics engine</h1>
-      <p class="lede">Both dataset iterations were produced by <code>relativistic_simulator</code> — the difference is entirely in how the input parameter ranges (especially β) were sampled.</p>
-      <div class="plain-note">
-        <span class="plain-tag">In plain words</span><br>
-        The physics engine is the recipe; this page is about the shopping list — which values of mass, force, speed and time actually got fed into it, and in what proportion. That choice turned out to matter more than anything about the models themselves — see the <a href="research.html#qa">"widening the training data" finding</a>.
-      </div>
-      <div class="mini-qa">
-        <div class="mq"><div class="mq-q">Why generate 1,000,000 rows instead of, say, 10,000?</div><div class="mq-a">More examples means better coverage of the huge mass/force ranges, and it was still fast enough to train nine different models on within minutes.</div></div>
-        <div class="mq"><div class="mq-q">Why does the "extreme" test set behave differently across the two iterations?</div><div class="mq-a">Because it's only "extreme" relative to what a model actually trained on — see the callouts below, and the full explanation on the <a href="research.html#qa">research page</a>.</div></div>
-      </div>
+      <p class="lede">Both dataset iterations were produced by <code>relativistic_simulator</code> — the difference is entirely in how the input parameter ranges (especially β) were sampled. The rationale behind this design is discussed in the <a href="research.html#methodology">Research report's methodology section</a>.</p>
     </div>
   </section>
 
@@ -47,7 +39,7 @@
           <p><strong>β mixture:</strong> 70% U(0, 0.8) · 20% U(0.8, 0.95) · 10% U(0.95, 0.999999), shuffled</p>
         </div>
       </div>
-      <div class="callout warn" style="margin-top:1rem"><strong>Genuine extrapolation:</strong> training β never exceeds 0.8, but the test set reaches β = 0.999999. Models trained on Iteration 1 are evaluated well outside their training range — see <a href="conclusions.html">Conclusions</a> for what happened.</div>
+      <div class="callout warn" style="margin-top:1rem"><strong>Genuine extrapolation:</strong> training β never exceeds 0.8, but the test set reaches β = 0.999999. Models trained on Iteration 1 are evaluated well outside their training range — see <a href="research.html#conclusions">Research → Conclusions</a> for what happened.</div>
 
       <hr class="sep">
 
@@ -69,7 +61,7 @@
           <p style="margin-top:.7rem"><code>sklearn.train_test_split</code>, test_size=0.2 then 0.5, random_state=42.</p>
         </div>
       </div>
-      <div class="callout" style="margin-top:1rem"><strong>Important nuance:</strong> the "extreme" evaluation file (<code>relativistic_extreme_test_10k.npy</code>) is the same file used in Iteration 1 — but because Iteration-2 training now also spans β up to 0.999999, this is no longer a true out-of-distribution test for the current models. It is an independently re-drawn 10,000-row sample from an overlapping distribution. See <a href="ood.html">Normal vs Extreme</a> for what this means for the results.</div>
+      <div class="callout" style="margin-top:1rem"><strong>Important nuance:</strong> the "extreme" evaluation file (<code>relativistic_extreme_test_10k.npy</code>) is the same file used in Iteration 1 — but because Iteration-2 training now also spans β up to 0.999999, this is no longer a true out-of-distribution test for the current models. It is an independently re-drawn 10,000-row sample from an overlapping distribution. See <a href="results.html#generalization">Results → Generalization</a> for what this means for the results.</div>
 
       <hr class="sep">
 
@@ -113,7 +105,7 @@
 </main>
 
 <div class="page-prevnext wrap">
-  <a href="physics-engine.html"><span class="lbl">Previous</span>Physics Engine</a>
+  <a href="physics.html"><span class="lbl">Previous</span>Physics &amp; Engine</a>
   <a class="next" href="models.html"><span class="lbl">Next</span>Models</a>
 </div>
 
