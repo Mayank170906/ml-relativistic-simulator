@@ -1,0 +1,20 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+*.joblib
+# Virtual environments
+.venv
+*.npy
+*.csv
+*.pt
+models-oldData/
+models_physics_data/
+*/models_physics_data/
+*.ipynb_checkpoints/
+*.log
+*.tmp
+*.cache
