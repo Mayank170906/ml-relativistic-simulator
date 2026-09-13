@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notebooks</title>
+<meta name="description" content="Every Jupyter notebook behind this project, exported to standalone HTML and explained: what it does, why it exists, and what it produced.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main>
+  <section class="section-tight">
+    <div class="wrap">
+      <p class="breadcrumbs"><a href="index.html">Home</a> / Notebooks</p>
+      <span class="eyebrow">Read the actual code</span>
+      <h1>Every notebook, exported and explained</h1>
+      <p class="lede">This whole project was built and run inside Jupyter notebooks — no hidden pipeline, no framework doing the work behind the scenes. Every notebook below was exported straight to HTML exactly as it ran (code, output, plots and all) and is linked here so you can open it and read it directly, in full, in your browser. This page is the hub: pick a notebook below and it opens in a new tab.</p>
+
+      <div class="scratch-banner">
+        <span class="plain-tag">Built from scratch</span>
+        <h3>The physics engine, the datasets, and every model here were built from the ground up</h3>
+        <p style="margin:0">The ground-truth physics simulator that every dataset in this project comes from — <code>relativistic-simulator</code> — is a package I designed, implemented, tested and published myself. Nothing in this project imports a pre-built relativity library, a pretrained model, or a high-level AutoML framework: every notebook below is plain NumPy, PyTorch and scikit-learn code written from first principles.</p>
+        <div class="lib-row">
+          <span class="lib-pill">numpy</span>
+          <span class="lib-pill">pytorch</span>
+          <span class="lib-pill">scikit-learn</span>
+          <span class="lib-pill">pandas</span>
+          <span class="lib-pill">matplotlib</span>
+          <span class="lib-pill">relativistic-simulator (my own package)</span>
+        </div>
+        <div class="link-icons" style="margin-top:1rem">
+          <a class="link-pill" href="https://github.com/Mayank170906/relativistic-simulator" target="_blank" rel="noopener">⭐ Physics engine — GitHub</a>
+          <a class="link-pill" href="https://pypi.org/project/relativistic-simulator/" target="_blank" rel="noopener">📦 Physics engine — PyPI (v0.1.3)</a>
+          <a class="link-pill" href="https://mayank170906.github.io/relativistic-simulator/" target="_blank" rel="noopener">📖 Physics engine — Documentation</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="era-group-head">
+        <span class="badge badge-brand">ITERATION 2 — CURRENT</span>
+        <h2>The main pipeline (full β range, physics_data.npy)</h2>
+      </div>
+      <p>These four notebooks are the current, primary pipeline described throughout this report: generate the widened-range dataset, then train and evaluate every model on it.</p>
+      <div class="grid grid-2" id="era2Grid"></div>
+
+      <div class="era-group-head">
+        <span class="badge badge-warn">ITERATION 1 — EARLIER ATTEMPT</span>
+        <h2>The first attempt (narrow β range) and its failure analysis</h2>
+      </div>
+      <p>These five notebooks are the earlier iteration, trained only on everyday speeds (β ≤ 0.8). Reading them alongside Iteration 2 is the fastest way to see exactly what changed and why it mattered — see <a href="ood.html">Normal vs Extreme</a> and <a href="conclusions.html">Conclusions</a> for the results this produced.</p>
+      <div class="grid grid-2" id="era1Grid"></div>
+    </div>
+  </section>
+</main>
+
+<div class="page-prevnext wrap">
+  <a href="research.html"><span class="lbl">Previous</span>The Research, Explained</a>
+  <a class="next" href="overview.html"><span class="lbl">Next</span>Overview &amp; Timeline</a>
+</div>
+
+<footer id="site-footer" class="site-footer"></footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+(function(){
+  var era2 = [
+    { file:"era2-data-generation.html", icon:"🗂️", title:"Data Generation", src:"data/data_gen.ipynb", desc:"Drives my own <code>relativistic_simulator.simulate()</code> in a per-row loop with a controlled β mixture (70% everyday speeds, 20% fast, 10% near-light-speed) to build the 1,000,000-row <code>physics_data.npy</code> dataset used by every model below, then runs the engine's own validation checks on it." },
+    { file:"era2-sklearn-models.html", icon:"🌲", title:"Scikit-learn Model Sweep", src:"notebooks/ml.ipynb", desc:"Trains and scores all 7 classic regressors (linear, polynomial, decision tree, random forest, extra trees, gradient boosting, hist gradient boosting) on the same train/test split, producing the per-target R²/RMSE/MAE table used on the Results page." },
+    { file:"era2-neural-network.html", icon:"🧠", title:"Plain Neural Network", src:"notebooks/neuralnetwork.ipynb", desc:"Builds and trains the 8-layer PyTorch MLP (5→…→8) from scratch — model definition, training loop, AdamW optimizer, learning-rate scheduler — and evaluates it on both the normal and extreme test sets." },
+    { file:"era2-polynomial-neural-network.html", icon:"➗", title:"Polynomial-Feature Neural Network", src:"notebooks/PolynomialNeuralNetwork.ipynb", desc:"The same network shape, but first expands the 5 inputs into 20 degree-2 polynomial features by hand before training, to test whether an explicit feature hint helps or hurts." }
+  ];
+  var era1 = [
+    { file:"era1-linear-regression.html", icon:"📏", title:"Linear Regression", src:"notebooks-oldData/linearregression.ipynb", desc:"The first, simplest model tried in Iteration 1 — plain linear regression trained only on β≤0.8 data, establishing the earliest baseline before anything more complex was attempted." },
+    { file:"era1-polynomial-regression.html", icon:"📐", title:"Polynomial Regression", src:"notebooks-oldData/PolynomialRegression.ipynb", desc:"Degree 2–4 polynomial regression on the same narrow-range data — this is the notebook where degree 3/4 models later produced the extreme negative R² scores once tested on high-β data." },
+    { file:"era1-decision-tree.html", icon:"🌳", title:"Decision Tree &amp; Ensembles", src:"notebooks-oldData/tree.ipynb", desc:"Decision tree, random forest, extra trees, gradient boosting and hist gradient boosting, all trained on the narrow β≤0.8 range for the Iteration-1 comparison." },
+    { file:"era1-neural-network.html", icon:"🧠", title:"Neural Network (Iteration 1)", src:"notebooks-oldData/neuralnetwork.ipynb", desc:"The first neural network attempt, trained on the same narrow-range dataset, before the training distribution was widened in Iteration 2." },
+    { file:"era1-evaluation.html", icon:"🔍", title:"Extrapolation Evaluation", src:"notebooks-oldData/evaluation.ipynb", desc:"Loads every Iteration-1 model and scores it against the independently-generated extreme test set (β up to 0.999999) — this is the notebook that surfaced the \"excellent interpolation but poor extrapolation\" failure and directly produced the numbers shown on the Normal vs Extreme page." }
+  ];
+
+  function card(nb){
+    return '<div class="notebook-card">' +
+      '<div class="nb-head"><span class="nb-icon">' + nb.icon + '</span><span class="badge badge-neutral">HTML export</span></div>' +
+      '<h3 style="margin:0">' + nb.title + '</h3>' +
+      '<div class="nb-file">' + nb.src + '</div>' +
+      '<p style="margin:0">' + nb.desc + '</p>' +
+      '<a class="nb-open" href="notebooks/' + nb.file + '" target="_blank" rel="noopener">Open notebook →</a>' +
+    '</div>';
+  }
+  document.getElementById("era2Grid").innerHTML = era2.map(card).join("");
+  document.getElementById("era1Grid").innerHTML = era1.map(card).join("");
+})();
+</script>
+</body>
+</html>

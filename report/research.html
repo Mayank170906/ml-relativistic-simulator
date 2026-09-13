@@ -20,6 +20,26 @@
         <a class="btn btn-primary" href="#workflow">See the workflow →</a>
         <a class="btn btn-ghost" href="#glossary">Jump to glossary</a>
         <a class="btn btn-ghost" href="#qa">Jump to Q&amp;A</a>
+        <a class="btn btn-ghost" href="notebooks.html">📓 Read the raw notebooks</a>
+      </div>
+
+      <div class="scratch-banner">
+        <span class="plain-tag">Built from scratch</span>
+        <h3>I designed and published the physics engine myself — everything else is plain NumPy, PyTorch and scikit-learn</h3>
+        <p style="margin:0">Every "correct answer" in this project — position, velocity, β, γ, momentum, kinetic energy, total energy, proper time — comes from <code>relativistic-simulator</code>, a special-relativity physics engine I designed, implemented, tested and published myself as an independent open-source package. It is not a wrapper around an existing physics library. On top of it, every model in this project is built from basic, general-purpose libraries — no pretrained models, no AutoML, no relativity-aware ML framework.</p>
+        <div class="lib-row">
+          <span class="lib-pill">numpy</span>
+          <span class="lib-pill">pytorch</span>
+          <span class="lib-pill">scikit-learn</span>
+          <span class="lib-pill">pandas</span>
+          <span class="lib-pill">matplotlib</span>
+          <span class="lib-pill">relativistic-simulator (my own package)</span>
+        </div>
+        <div class="link-icons" style="margin-top:1rem">
+          <a class="link-pill" href="https://github.com/Mayank170906/relativistic-simulator" target="_blank" rel="noopener">⭐ Physics engine — GitHub</a>
+          <a class="link-pill" href="https://pypi.org/project/relativistic-simulator/" target="_blank" rel="noopener">📦 Physics engine — PyPI (v0.1.3)</a>
+          <a class="link-pill" href="https://mayank170906.github.io/relativistic-simulator/" target="_blank" rel="noopener">📖 Physics engine — Documentation</a>
+        </div>
       </div>
     </div>
   </section>
@@ -111,11 +131,11 @@
     {
       title: "1. Build an exact physics engine",
       what: "Instead of scattering relativity formulas across notebooks, I wrote and published a standalone Python package, <code>relativistic-simulator</code>, that computes the exact motion of a particle under a constant force at any speed, including extremely close to light-speed.",
-      why: "A model is only as trustworthy as its ground truth. If the \"correct answers\" used to train and grade the ML models were themselves approximate or buggy, every result downstream would be meaningless. Packaging it separately also means it's independently tested and numerically validated — see the <a href=\"physics-engine.html\">Physics Engine</a> page."
+      why: "A model is only as trustworthy as its ground truth. If the \"correct answers\" used to train and grade the ML models were themselves approximate or buggy, every result downstream would be meaningless. Packaging it separately also means it's independently tested and numerically validated — see the <a href=\"physics-engine.html\">Physics Engine</a> page, or the engine's own <a href=\"https://github.com/Mayank170906/relativistic-simulator\" target=\"_blank\" rel=\"noopener\">GitHub</a> / <a href=\"https://pypi.org/project/relativistic-simulator/\" target=\"_blank\" rel=\"noopener\">PyPI</a> / <a href=\"https://mayank170906.github.io/relativistic-simulator/\" target=\"_blank\" rel=\"noopener\">docs</a>."
     },
     {
       title: "2. Generate the training data",
-      what: "The engine was run 1,000,000 times with randomly sampled mass, force, starting speed and elapsed time, recording 5 inputs and 8 physical outputs (position, velocity, β, γ, momentum, kinetic energy, total energy, proper time) each time.",
+      what: "The engine was run 1,000,000 times with randomly sampled mass, force, starting speed and elapsed time, recording 5 inputs and 8 physical outputs (position, velocity, β, γ, momentum, kinetic energy, total energy, proper time) each time. Notebook: <a href=\"notebooks/era2-data-generation.html\" target=\"_blank\" rel=\"noopener\">era2-data-generation</a>.",
       why: "One million examples gives the models enough variety to see the relationship in many different regimes, not just one. The ranges were deliberately sampled on a <span class=\"kw\" title=\"Sampling values evenly across orders of magnitude (10⁰, 10¹, 10², …) instead of evenly across a plain number line.\">log scale</span> for mass and force, and as a deliberate mixture of everyday and near-light speeds for β — see <a href=\"datasets.html\">Datasets</a>."
     },
     {
@@ -125,7 +145,7 @@
     },
     {
       title: "4. Train many different model types",
-      what: "Nine different model types were trained on the identical data: seven classic scikit-learn regressors (linear regression, polynomial regression, decision tree, random forest, extra trees, gradient boosting, histogram gradient boosting) plus two small neural networks (a plain one, and one fed extra \"squared and multiplied\" features).",
+      what: "Nine different model types were trained on the identical data: seven classic scikit-learn regressors (linear regression, polynomial regression, decision tree, random forest, extra trees, gradient boosting, histogram gradient boosting) plus two small neural networks (a plain one, and one fed extra \"squared and multiplied\" features). Notebooks: <a href=\"notebooks/era2-sklearn-models.html\" target=\"_blank\" rel=\"noopener\">era2-sklearn-models</a>, <a href=\"notebooks/era2-neural-network.html\" target=\"_blank\" rel=\"noopener\">era2-neural-network</a>, <a href=\"notebooks/era2-polynomial-neural-network.html\" target=\"_blank\" rel=\"noopener\">era2-polynomial-neural-network</a>.",
       why: "No single model family is best at everything — some handle smooth curves well, some handle sharp corners well, some handle huge value ranges well. Comparing many side-by-side on the exact same data is the only fair way to find out which properties of a problem favor which kind of model — see <a href=\"models.html\">Models</a>."
     },
     {
@@ -135,7 +155,7 @@
     },
     {
       title: "6. Stress-test with the extreme set",
-      what: "The same trained models were then run on the extreme, near-light-speed test set to see whether their accuracy held up outside their comfort zone. This was repeated for an earlier version of the project where training deliberately excluded high speeds, to see a genuine \"never seen this before\" failure.",
+      what: "The same trained models were then run on the extreme, near-light-speed test set to see whether their accuracy held up outside their comfort zone. This was repeated for an earlier version of the project where training deliberately excluded high speeds, to see a genuine \"never seen this before\" failure. Notebook: <a href=\"notebooks/era1-evaluation.html\" target=\"_blank\" rel=\"noopener\">era1-evaluation</a>.",
       why: "A model that only works inside the exact range it was trained on isn't very useful in practice. This step answers the more interesting question: does the model actually understand the underlying rule, or did it just memorize the shape of the training data? The two answers turned out to be very different across the two iterations — see <a href=\"ood.html\">Normal vs Extreme</a>."
     },
     {
@@ -256,6 +276,7 @@
 
   /* ---------------- Map to detail pages ---------------- */
   var map = [
+    { href:"notebooks.html", icon:"📓", title:"Notebooks", body:"Every notebook behind this project, exported to HTML, explained one by one and linked so you can read the actual code and output." },
     { href:"physics.html", icon:"⚛️", title:"The Physics", body:"The governing equations, and an interactive slider to feel how gamma explodes as β→1." },
     { href:"physics-engine.html", icon:"🧮", title:"Physics Engine", body:"The relativistic-simulator package itself: API, validation, and why it avoids naive formulas." },
     { href:"datasets.html", icon:"🗂️", title:"Datasets", body:"Exactly how both dataset iterations were generated, split, and how their distributions differ." },

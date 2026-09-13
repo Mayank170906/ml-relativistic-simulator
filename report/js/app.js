@@ -5,6 +5,7 @@
   var NAV_ITEMS = [
     { href: "index.html", label: "Home" },
     { href: "research.html", label: "Research" },
+    { href: "notebooks.html", label: "Notebooks" },
     { href: "overview.html", label: "Overview" },
     { href: "physics.html", label: "Physics" },
     { href: "physics-engine.html", label: "Engine" },

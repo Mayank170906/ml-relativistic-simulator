@@ -483,6 +483,35 @@ input[type=range]{ flex:1; accent-color: var(--brand); }
   font-weight:700; color: var(--brand); border-bottom: 1px dashed color-mix(in srgb, var(--brand) 50%, transparent); cursor:help;
 }
 
+/* From-scratch attribution banner */
+.scratch-banner{
+  border:1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem 1.7rem;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--brand) 10%, var(--surface)), color-mix(in srgb, var(--brand-2) 8%, var(--surface)));
+  box-shadow: var(--shadow-sm); margin: 1.4rem 0 1.8rem;
+}
+.scratch-banner h3{ margin-bottom:.4rem; }
+.scratch-banner .lib-row{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.9rem; }
+.scratch-banner .lib-pill{
+  font-family: var(--font-mono); font-size:.78rem; font-weight:700; background: var(--surface); border:1px solid var(--border);
+  padding:.32rem .7rem; border-radius:999px; color: var(--text);
+}
+
+/* Notebook hub */
+.notebook-card{
+  background: var(--surface); border:1px solid var(--border); border-radius: var(--radius-md);
+  padding: 1.2rem 1.3rem; box-shadow: var(--shadow-sm); display:flex; flex-direction:column; gap:.55rem;
+}
+.notebook-card .nb-head{ display:flex; align-items:center; justify-content:space-between; gap:.6rem; }
+.notebook-card .nb-icon{ font-size:1.3rem; }
+.notebook-card .nb-file{ font-family: var(--font-mono); font-size:.74rem; color: var(--text-faint); }
+.notebook-card .nb-open{
+  align-self:flex-start; margin-top:.3rem; font-weight:700; font-size:.85rem; display:inline-flex; align-items:center; gap:.4rem;
+  padding:.5rem .85rem; border-radius:9px; border:1px solid var(--border); background: var(--surface-2); color: var(--text);
+}
+.notebook-card .nb-open:hover{ border-color: var(--brand); color: var(--brand); text-decoration:none; }
+.era-group-head{ display:flex; align-items:center; gap:.7rem; margin: 2.2rem 0 1rem; }
+.era-group-head h2{ margin:0; }
+
 .research-hero{
   position:relative; overflow:hidden; padding: 3.6rem 0 2.2rem;
   background:
