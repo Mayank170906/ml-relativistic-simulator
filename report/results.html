@@ -6,6 +6,7 @@
 <title>Results</title>
 <meta name="description" content="Model comparison, per-target analysis, and normal-vs-extreme generalization results across all 9 trained models.">
 <link rel="stylesheet" href="css/style.css">
+<script src="js/motion.js"></script>
 </head>
 <body>
 <header id="site-header"></header>
@@ -268,7 +269,7 @@
     targetChart && targetChart.destroy();
     targetChart = ChartHelpers.barChart(document.getElementById("targetChart"),
       rows.map(function(r){return r.model;}),
-      [{ label:"R²", data: rows.map(function(r){return r.R2;}), backgroundColor: rows.map(function(r,i){ return i===0 ? "#16a34a" : (i===rows.length-1?"#e0393e":"#4f5bff"); }) }],
+      [{ label:"R²", data: rows.map(function(r){return r.R2;}), backgroundColor: rows.map(function(r,i){ return i===0 ? "#06d6a0" : (i===rows.length-1?"#ef476f":"#4895ef"); }) }],
       { indexAxis:"y", plugins:{legend:{display:false}} }
     );
   }
@@ -288,8 +289,8 @@
     var labels = normal.map(function(r){ return r.Target.replace(/_/g," "); });
     oodChart && oodChart.destroy();
     oodChart = ChartHelpers.barChart(document.getElementById("oodChart"), labels, [
-      { label: "Normal R²", data: normal.map(function(r){return r.R2;}), backgroundColor: "#4f5bff" },
-      { label: "Extreme R²", data: extreme.map(function(r){return r.R2;}), backgroundColor: "#ff6a3d" }
+      { label: "Normal R²", data: normal.map(function(r){return r.R2;}), backgroundColor: "#4895ef" },
+      { label: "Extreme R²", data: extreme.map(function(r){return r.R2;}), backgroundColor: "#f77f00" }
     ]);
     var tbody = document.getElementById("oodTableBody");
     tbody.innerHTML = normal.map(function(r,i){
@@ -324,7 +325,7 @@
     oldChart = ChartHelpers.barChart(document.getElementById("oldEraChart"),
       rows.map(function(r){return r.model;}),
       [{ label: "R² on extreme test (Iteration 1 models)", data: rows.map(function(r){return r.r2;}),
-         backgroundColor: rows.map(function(r){ return r.r2 < 0 ? "#e0393e" : "#16a34a"; }) }],
+         backgroundColor: rows.map(function(r){ return r.r2 < 0 ? "#ef476f" : "#06d6a0"; }) }],
       { indexAxis: "y" }
     );
     document.getElementById("oldEraNote").textContent =

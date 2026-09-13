@@ -6,6 +6,7 @@
 <title>Datasets</title>
 <meta name="description" content="How the training and evaluation datasets were generated, their shapes, splits, and measured distribution shift.">
 <link rel="stylesheet" href="css/style.css">
+<script src="js/motion.js"></script>
 </head>
 <body>
 <header id="site-header"></header>
@@ -131,8 +132,8 @@
     var r = stats.find(function(x){ return x.feature === name; });
     qchart && qchart.destroy();
     qchart = ChartHelpers.barChart(qctx, ["Q25","Median","Q75"], [
-      { label: "Train", data: [r.train_q25, r.train_median, r.train_q75], backgroundColor: "#4f5bff" },
-      { label: "Extreme test", data: [r.test_q25, r.test_median, r.test_q75], backgroundColor: "#ff6a3d" }
+      { label: "Train", data: [r.train_q25, r.train_median, r.train_q75], backgroundColor: "#4895ef" },
+      { label: "Extreme test", data: [r.test_q25, r.test_median, r.test_q75], backgroundColor: "#f77f00" }
     ]);
     document.getElementById("featureStatsCard").innerHTML =
       '<h3>' + name + '</h3>' +

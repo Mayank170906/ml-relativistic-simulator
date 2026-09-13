@@ -6,56 +6,79 @@
 <title>Relativistic ML Research Report</title>
 <meta name="description" content="Learning special-relativistic dynamics from a custom physics simulator: datasets, models, normal vs. extreme evaluation.">
 <link rel="stylesheet" href="css/style.css">
+<script src="js/motion.js"></script>
 </head>
 <body>
 <header id="site-header"></header>
 
 <main>
   <section class="hero">
+    <canvas id="heroCanvas" class="hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero-scrim" aria-hidden="true"></div>
     <div class="wrap">
-      <span class="eyebrow">Relativistic Physics × Machine Learning</span>
-      <h1>Learning Computational Relativistic Dynamics from Synthetic Physical Simulation</h1>
-      <p class="lede">A custom special-relativity simulator generates exact ground truth for eight physical quantities under constant 1D force. This report documents every dataset, model family, and evaluation this project actually ran — including where the models succeeded and where they failed.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="research.html">Read the Research Report →</a>
+      <span class="eyebrow" data-enter="1">Relativistic Physics × Machine Learning</span>
+      <h1 data-enter="2">Learning relativistic dynamics from <span class="hl">synthetic simulation</span></h1>
+      <p class="lede" data-enter="3">A custom special-relativity simulator generates exact ground truth for eight physical quantities under constant 1D force. This report documents every dataset, model family, and evaluation the project ran — including where the models succeeded and where they failed.</p>
+      <div class="hero-actions" data-enter="4">
+        <a class="btn btn-primary" href="research.html"><span>Read the Research Report</span><span>→</span></a>
         <a class="btn btn-ghost" href="results.html">Explore Results</a>
-        <a class="btn btn-ghost" href="physics.html">Physics Engine</a>
+        <a class="btn btn-ghost" href="notebooks.html">Notebooks</a>
       </div>
+      <p class="hero-caption" data-enter="5">
+        <span class="live-dot" aria-hidden="true"></span>
+        Above — particles accelerating from rest under a constant force. Horizontal position maps β = v/c; they crowd against the light-speed barrier without ever reaching it. Colour shifts blue → violet → amber as β → 1. The faint rising curve is γ(β).
+      </p>
+    </div>
+  </section>
 
+  <section class="section-tight">
+    <div class="wrap">
       <div class="stat-strip">
-        <div class="stat"><div class="num">1,000,000</div><div class="lbl">Training samples (physics_data.npy)</div></div>
+        <div class="stat"><div class="num">1,000,000</div><div class="lbl">Training samples</div></div>
         <div class="stat"><div class="num">8</div><div class="lbl">Physical targets predicted</div></div>
         <div class="stat"><div class="num">9</div><div class="lbl">Model architectures trained</div></div>
-        <div class="stat"><div class="num">2</div><div class="lbl">Evaluation regimes: normal + extreme</div></div>
-        <div class="stat"><div class="num">v0.1.3</div><div class="lbl">Custom physics engine on PyPI</div></div>
+        <div class="stat"><div class="num">2</div><div class="lbl">Evaluation regimes</div></div>
+        <div class="stat"><div class="num">v0.1.3</div><div class="lbl">Physics engine on PyPI</div></div>
       </div>
+    </div>
+  </section>
 
+  <section class="section" style="padding-top:2.5rem">
+    <div class="wrap">
       <div class="scratch-banner">
         <span class="plain-tag">Attribution</span>
         <h3>The physics engine was independently designed and published to PyPI</h3>
         <p style="margin:0">Every ground-truth value in this project comes from <code>relativistic-simulator</code>, a special-relativity physics engine designed and released as an independent open-source package — not a wrapper around an existing library. Every model is implemented directly with NumPy, PyTorch, and scikit-learn: no pretrained components, no AutoML.</p>
-        <div class="link-icons" style="margin-top:1rem">
+        <div class="lib-row">
+          <span class="lib-pill">numpy</span>
+          <span class="lib-pill">pytorch</span>
+          <span class="lib-pill">scikit-learn</span>
+          <span class="lib-pill">pandas</span>
+          <span class="lib-pill">matplotlib</span>
+          <span class="lib-pill">relativistic-simulator</span>
+        </div>
+        <div class="link-icons" style="margin-top:1.2rem">
           <a class="link-pill" href="https://github.com/Mayank170906/relativistic-simulator" target="_blank" rel="noopener">⭐ GitHub</a>
           <a class="link-pill" href="https://pypi.org/project/relativistic-simulator/" target="_blank" rel="noopener">📦 PyPI</a>
           <a class="link-pill" href="https://mayank170906.github.io/relativistic-simulator/" target="_blank" rel="noopener">📖 Documentation</a>
-          <a class="link-pill" href="notebooks.html">📓 Read the raw notebooks</a>
+          <a class="link-pill" href="notebooks.html">📓 Raw notebooks</a>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" style="padding-top:1rem">
     <div class="wrap">
       <div class="section-head">
         <span class="kicker">Research dashboard</span>
         <h2>What this project measured</h2>
-        <p>Every number below is read directly from this repository's result CSVs and notebooks — nothing is estimated for display purposes.</p>
+        <p>Every number below is read directly from this repository's result files and notebooks — nothing is estimated for display.</p>
       </div>
       <div class="grid grid-4">
         <a class="card card-link metric-card" href="datasets.html">
           <div class="metric-num">1,000,000 × 13</div>
           <div class="metric-lbl">Dataset shape</div>
-          <div class="metric-sub">5 input features + 8 ground-truth targets, generated by <code>relativistic_simulator.simulate()</code>.</div>
+          <div class="metric-sub">5 input features + 8 ground-truth targets, generated by <code>simulate()</code>.</div>
         </a>
         <a class="card card-link metric-card" href="models.html">
           <div class="metric-num">9</div>
@@ -65,7 +88,7 @@
         <a class="card card-link metric-card" href="results.html">
           <div class="metric-num">Gradient Boosting</div>
           <div class="metric-lbl">Best model, normal test</div>
-          <div class="metric-sub">Mean R² = 0.894 across all 8 targets (scikit-learn sweep on physics_data.npy).</div>
+          <div class="metric-sub">Mean R² = 0.894 across all 8 targets in the scikit-learn sweep.</div>
         </a>
         <a class="card card-link metric-card" href="results.html#targets">
           <div class="metric-num">Proper Time</div>
@@ -80,7 +103,7 @@
         <a class="card card-link metric-card" href="results.html#generalization">
           <div class="metric-num">0.715 → 0.748</div>
           <div class="metric-lbl">MLP: normal → extreme mean R²</div>
-          <div class="metric-sub">No degradation on the current-era extreme set — see why on the Results page.</div>
+          <div class="metric-sub">No degradation on the current-era extreme set — and the reason matters.</div>
         </a>
         <a class="card card-link metric-card" href="research.html#conclusions">
           <div class="metric-num">R² as low as −1.7×10⁹</div>
@@ -118,7 +141,7 @@
           <div class="flow-node">Extreme evaluation<span class="sub">independently generated 10k set</span></div>
         </div>
       </div>
-      <p style="text-align:center"><a href="research.html#methodology">See the full experimental history, including the earlier iteration that motivated this design →</a></p>
+      <p style="text-align:center;margin-top:2rem"><a href="research.html#methodology">See the full experimental history, including the earlier iteration that motivated this design →</a></p>
     </div>
   </section>
 </main>
@@ -127,5 +150,6 @@
 
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
+<script src="js/hero.js"></script>
 </body>
 </html>

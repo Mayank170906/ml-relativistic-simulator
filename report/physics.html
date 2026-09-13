@@ -6,6 +6,7 @@
 <title>Physics &amp; Engine</title>
 <meta name="description" content="The special-relativistic model this project learns from, and the relativistic-simulator reference implementation that computes its exact ground truth.">
 <link rel="stylesheet" href="css/style.css">
+<script src="js/motion.js"></script>
 </head>
 <body>
 <header id="site-header"></header>
@@ -269,8 +270,8 @@ print(report.passed)</code></pre>
   var chart = new Chart(ctx, {
     type: "line",
     data: { datasets: [
-      { label: "γ(β)", data: betaCurve, borderColor: "#4f5bff", backgroundColor: "#4f5bff", pointRadius:0, borderWidth:2, tension:.15 },
-      { label: "Current β", data: [{x: 0.5, y: gammaOf(0.5)}], borderColor:"#ff6a3d", backgroundColor:"#ff6a3d", pointRadius:6, showLine:false }
+      { label: "γ(β)", data: betaCurve, borderColor: "#4895ef", backgroundColor: "#4895ef", pointRadius:0, borderWidth:2, tension:.15 },
+      { label: "Current β", data: [{x: 0.5, y: gammaOf(0.5)}], borderColor:"#f77f00", backgroundColor:"#f77f00", pointRadius:6, showLine:false }
     ]},
     options: {
       responsive:true, maintainAspectRatio:false,

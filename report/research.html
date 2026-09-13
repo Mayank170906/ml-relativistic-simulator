@@ -7,7 +7,7 @@
 <meta name="description" content="Full technical report: problem statement, methodology, terminology, results summary, discussion, and conclusions for learning special-relativistic dynamics from a custom physics simulator.">
 <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="reading">
 <header id="site-header"></header>
 
 <main>
@@ -16,10 +16,19 @@
       <span class="eyebrow">Technical report</span>
       <h1>Learning Special-Relativistic Dynamics from a Custom Physics Simulator</h1>
       <p class="lede">This report documents a study of whether general-purpose regression models — from linear regression to gradient-boosted trees to small neural networks — can recover exact special-relativistic dynamics from synthetic data, and how their accuracy behaves under distribution shift toward near-light-speed regimes. It covers the physics engine and dataset design, the modeling methodology, full terminology and notation, a summary of results, a discussion of the reasoning behind key design decisions, and the project's conclusions and open questions.</p>
+
+      <dl class="paper-meta">
+        <div><dt>Author</dt><dd>Mayank</dd></div>
+        <div><dt>Subject</dt><dd>Machine learning · Special relativity</dd></div>
+        <div><dt>Ground truth</dt><dd><code>relativistic-simulator</code> v0.1.3</dd></div>
+        <div><dt>Dataset</dt><dd>1,000,000 samples · 5 inputs → 8 targets</dd></div>
+        <div><dt>License</dt><dd><a href="license.html">MIT</a></dd></div>
+      </dl>
+
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#abstract">Read the report →</a>
+        <a class="btn btn-primary" href="#abstract"><span>Read the report</span><span>→</span></a>
         <a class="btn btn-ghost" href="#terminology">Terminology</a>
-        <a class="btn btn-ghost" href="notebooks.html">📓 Notebooks</a>
+        <a class="btn btn-ghost" href="notebooks.html">Notebooks</a>
       </div>
 
       <div class="scratch-banner">

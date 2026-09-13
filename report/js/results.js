@@ -43,9 +43,9 @@
       var labels = rows.map(function (r) { return r.model; });
       var values = rows.map(function (r) { return r[currentMetric]; });
       var colors = rows.map(function (r, i) {
-        if (i === 0) return "#16a34a";
-        if (i === rows.length - 1) return "#e0393e";
-        return "#4f5bff";
+        if (i === 0) return "#06d6a0";
+        if (i === rows.length - 1) return "#ef476f";
+        return "#4895ef";
       });
 
       chart && chart.destroy();
@@ -106,7 +106,7 @@
 
     ChartHelpers.barChart(document.getElementById("overallRankChart"),
       ranking.map(function (r) { return r.model; }),
-      [{ label: "Mean R² across 8 targets", data: ranking.map(function (r) { return r.mean; }), backgroundColor: "#4f5bff" }],
+      [{ label: "Mean R² across 8 targets", data: ranking.map(function (r) { return r.mean; }), backgroundColor: "#4895ef" }],
       { indexAxis: "y" }
     );
   });
